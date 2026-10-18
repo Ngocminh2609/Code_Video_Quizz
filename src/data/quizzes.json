@@ -1,7 +1,30 @@
 [
   {
-    "id": "python-mutable-default",
-    "folderNameVi": "01_Python_Gia_Tri_Mac_Dinh_List",
+    "id": "quiz-01",
+    "folderNameVi": "01_Python_Toan_Tu_Boolean_True",
+    "hookTitle": "90% Beginners Get This Wrong! 🐍",
+    "hookTitleVi": "90% Người Mới Sẽ Đoán Sai!",
+    "language": "python",
+    "code": "print(True + True * 3)",
+    "question": "What will be printed to stdout?",
+    "questionVi": "Kết quả in ra màn hình là gì?",
+    "options": [
+      { "key": "A", "text": "TypeError", "textVi": "Lỗi TypeError" },
+      { "key": "B", "text": "6", "textVi": "6" },
+      { "key": "C", "text": "4", "textVi": "4" },
+      { "key": "D", "text": "True3", "textVi": "True3" }
+    ],
+    "correctAnswer": "C",
+    "explanation": "In Python, True evaluates to integer 1. Multiplication precedes addition: 1 + (1 * 3) = 4.",
+    "explanationVi": "Trong Python, True tương đương 1. Nhân trước cộng sau: 1 + (1 * 3) = 4.",
+    "difficulty": "Easy",
+    "difficultyVi": "Cơ Bản",
+    "category": "Operators & Precedence",
+    "categoryVi": "Toán Tử & Thứ Tự Thực Hiện"
+  },
+  {
+    "id": "quiz-02",
+    "folderNameVi": "02_Python_Gia_Tri_Mac_Dinh_List",
     "hookTitle": "99% Miss This Python Logic!",
     "hookTitleVi": "99% Lập Trình Viên Mắc Bẫy Này! 🐍",
     "language": "python",
@@ -9,38 +32,22 @@
     "question": "What will be printed?",
     "questionVi": "Kết quả in ra màn hình là gì?",
     "options": [
-      {
-        "key": "A",
-        "text": "[1] then [2]",
-        "textVi": "[1] rồi đến [2]"
-      },
-      {
-        "key": "B",
-        "text": "[1] then [1, 2]",
-        "textVi": "[1] rồi đến [1, 2]"
-      },
-      {
-        "key": "C",
-        "text": "[1] then [2, 1]",
-        "textVi": "[1] rồi đến [2, 1]"
-      },
-      {
-        "key": "D",
-        "text": "TypeError: modified",
-        "textVi": "Lỗi TypeError"
-      }
+      { "key": "A", "text": "[1] then [2]", "textVi": "[1] rồi đến [2]" },
+      { "key": "B", "text": "[1] then [1, 2]", "textVi": "[1] rồi đến [1, 2]" },
+      { "key": "C", "text": "[1] then [2, 1]", "textVi": "[1] rồi đến [2, 1]" },
+      { "key": "D", "text": "TypeError: modified", "textVi": "Lỗi TypeError" }
     ],
     "correctAnswer": "B",
     "explanation": "Default list arguments are created ONCE when the function is defined! Successive calls reuse the exact same mutable list in memory.",
-    "explanationVi": "Trong Python, đối số mặc định chỉ được tạo 1 LẦN DUY NHẤT khi định nghĩa hàm! Các lần gọi tiếp theo dùng chung đối tượng danh sách này trong bộ nhớ.",
+    "explanationVi": "Trong Python, đối số mặc định chỉ được tạo 1 LẦN DUY NHẤT khi định nghĩa hàm! Các lần gọi tiếp theo dùng chung danh sách trong bộ nhớ.",
     "difficulty": "Medium",
     "difficultyVi": "Vừa",
     "category": "Scope & Mutability",
     "categoryVi": "Phạm Vi & Tính Biến Đổi"
   },
   {
-    "id": "javascript-array-coercion",
-    "folderNameVi": "02_JavaScript_Ep_Kieu_Cong_Mang",
+    "id": "quiz-03",
+    "folderNameVi": "03_JavaScript_Ep_Kieu_Cong_Mang",
     "hookTitle": "JavaScript Type Coercion Trap! 😱",
     "hookTitleVi": "Cú Lừa Ép Kiểu Trong JavaScript! ⚡",
     "language": "javascript",
@@ -48,26 +55,10 @@
     "question": "What will be the output?",
     "questionVi": "Đầu ra console.log là gì?",
     "options": [
-      {
-        "key": "A",
-        "text": "[1, 2, 3, 4]",
-        "textVi": "Mảng [1, 2, 3, 4]"
-      },
-      {
-        "key": "B",
-        "text": "'1,23,4'",
-        "textVi": "Chuỗi '1,23,4'"
-      },
-      {
-        "key": "C",
-        "text": "'1, 2, 3, 4'",
-        "textVi": "Chuỗi '1, 2, 3, 4'"
-      },
-      {
-        "key": "D",
-        "text": "NaN",
-        "textVi": "Giá trị NaN"
-      }
+      { "key": "A", "text": "[1, 2, 3, 4]", "textVi": "Mảng [1, 2, 3, 4]" },
+      { "key": "B", "text": "'1,23,4'", "textVi": "Chuỗi '1,23,4'" },
+      { "key": "C", "text": "'1, 2, 3, 4'", "textVi": "Chuỗi '1, 2, 3, 4'" },
+      { "key": "D", "text": "NaN", "textVi": "Giá trị NaN" }
     ],
     "correctAnswer": "B",
     "explanation": "The '+' operator converts both arrays to strings ('1,2' and '3,4') and concatenates them into '1,23,4'!",
@@ -78,8 +69,8 @@
     "categoryVi": "Ép Kiểu Dữ Liệu"
   },
   {
-    "id": "cpp-reference-reseat",
-    "folderNameVi": "03_CPP_Tham_Chieu_Khong_The_Gan_Lai",
+    "id": "quiz-04",
+    "folderNameVi": "04_CPP_Tham_Chieu_Khong_The_Gan_Lai",
     "hookTitle": "Can C++ References Be Re-bound? 🤔",
     "hookTitleVi": "Tham Chiếu C++ Có Thể Gán Lại Không? ⚙️",
     "language": "cpp",
@@ -87,26 +78,10 @@
     "question": "What will be printed to stdout?",
     "questionVi": "Giá trị in ra màn hình là gì?",
     "options": [
-      {
-        "key": "A",
-        "text": "10 20",
-        "textVi": "10 20"
-      },
-      {
-        "key": "B",
-        "text": "20 40",
-        "textVi": "20 40"
-      },
-      {
-        "key": "C",
-        "text": "30 30",
-        "textVi": "30 30"
-      },
-      {
-        "key": "D",
-        "text": "40 40",
-        "textVi": "40 40"
-      }
+      { "key": "A", "text": "10 20", "textVi": "10 20" },
+      { "key": "B", "text": "20 40", "textVi": "20 40" },
+      { "key": "C", "text": "30 30", "textVi": "30 30" },
+      { "key": "D", "text": "40 40", "textVi": "40 40" }
     ],
     "correctAnswer": "C",
     "explanation": "In C++, references cannot be reseated after initialization! 'ref = b' assigns the value of b (30) to variable a.",
@@ -117,8 +92,8 @@
     "categoryVi": "Con Trỏ & Tham Chiếu"
   },
   {
-    "id": "java-integer-cache",
-    "folderNameVi": "04_Java_Bo_Nho_Dem_Integer_Cache",
+    "id": "quiz-05",
+    "folderNameVi": "05_Java_Bo_Nho_Dem_Integer_Cache",
     "hookTitle": "Senior Java Devs Even Fail This! ☕",
     "hookTitleVi": "Dev Java Lâu Năm Vẫn Trả Lời Sai! ☕",
     "language": "java",
@@ -126,26 +101,10 @@
     "question": "What is printed by println?",
     "questionVi": "Lệnh println in ra kết quả gì?",
     "options": [
-      {
-        "key": "A",
-        "text": "true true",
-        "textVi": "true true"
-      },
-      {
-        "key": "B",
-        "text": "true false",
-        "textVi": "true false"
-      },
-      {
-        "key": "C",
-        "text": "false true",
-        "textVi": "false true"
-      },
-      {
-        "key": "D",
-        "text": "false false",
-        "textVi": "false false"
-      }
+      { "key": "A", "text": "true true", "textVi": "true true" },
+      { "key": "B", "text": "true false", "textVi": "true false" },
+      { "key": "C", "text": "false true", "textVi": "false true" },
+      { "key": "D", "text": "false false", "textVi": "false false" }
     ],
     "correctAnswer": "B",
     "explanation": "Java caches Integer objects from -128 to 127. 128 creates separate heap instances, so reference equality (==) returns false!",
@@ -154,44 +113,5 @@
     "difficultyVi": "Khó",
     "category": "Object Caching",
     "categoryVi": "Bộ Nhớ Đệm Đối Tượng"
-  },
-  {
-    "id": "python-tuple-in-place",
-    "folderNameVi": "05_Python_Bien_Doi_List_Trong_Tuple",
-    "hookTitle": "Can You Mutate Inside a Tuple? 🐍",
-    "hookTitleVi": "Biến Đổi Danh Sách Bên Trong Tuple? 🐍",
-    "language": "python",
-    "code": "t = ([1, 2], 'cool')\ntry:\n    t[0] += [3]\nexcept TypeError:\n    pass\n\nprint(t[0])",
-    "question": "What is the final value of t[0]?",
-    "questionVi": "Giá trị cuối cùng của t[0] là gì?",
-    "options": [
-      {
-        "key": "A",
-        "text": "[1, 2]",
-        "textVi": "[1, 2]"
-      },
-      {
-        "key": "B",
-        "text": "[1, 2, 3]",
-        "textVi": "[1, 2, 3]"
-      },
-      {
-        "key": "C",
-        "text": "TypeError crashes",
-        "textVi": "Lỗi TypeError dừng app"
-      },
-      {
-        "key": "D",
-        "text": "None",
-        "textVi": "None"
-      }
-    ],
-    "correctAnswer": "B",
-    "explanation": "+= calls __iadd__ which extends the list in-place FIRST, then raises TypeError when attempting to assign back to the tuple!",
-    "explanationVi": "+= gọi phương thức __iadd__ mở rộng list ngay tại chỗ TRƯỚC, sau đó mới văng lỗi TypeError khi cố gán lại vào tuple!",
-    "difficulty": "Extreme",
-    "difficultyVi": "Cực Khó",
-    "category": "Data Structures",
-    "categoryVi": "Cấu Trúc Dữ Liệu"
   }
 ]

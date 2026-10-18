@@ -1,0 +1,84 @@
+import React from 'react';
+import { QuizCompositionProps } from './types';
+import { LANGUAGE_CONFIGS } from './utils/languageTheme';
+import { Background } from './components/Background';
+import { HeaderHook } from './components/HeaderHook';
+import { CodeCard } from './components/CodeCard';
+import { CountdownBar } from './components/CountdownBar';
+import { OptionsGrid } from './components/OptionsGrid';
+import { ExplanationCard } from './components/ExplanationCard';
+import { Confetti } from './components/Confetti';
+
+export const QuizComposition: React.FC<QuizCompositionProps> = ({ quiz }) => {
+  const languageConfig = LANGUAGE_CONFIGS[quiz.language] || LANGUAGE_CONFIGS.python;
+
+  return (
+    <div
+      style={{
+        position: 'relative',
+        width: 1080,
+        height: 1920,
+        overflow: 'hidden',
+        display: 'flex',
+        flexDirection: 'column',
+        boxSizing: 'border-box',
+        paddingTop: 65,
+        paddingBottom: 45,
+      }}
+    >
+      {/* Dynamic Animated Cyberpunk Background with Audio Spectrum */}
+      <Background languageConfig={languageConfig} />
+
+      {/* Confetti Explosion Triggered on Answer Reveal (Frame 210+) */}
+      <Confetti triggerFrame={210} />
+
+      {/* Content Container */}
+      <div
+        style={{
+          position: 'relative',
+          zIndex: 10,
+          display: 'flex',
+          flexDirection: 'column',
+          height: '100%',
+          justifyContent: 'space-between',
+        }}
+      >
+        {/* 1. Header Hook: Viral Badge, Hook Title & Language Badges */}
+        <HeaderHook
+          hookTitle={quiz.hookTitle}
+          hookTitleVi={quiz.hookTitleVi}
+          difficulty={quiz.difficulty}
+          difficultyVi={quiz.difficultyVi}
+          category={quiz.category}
+          categoryVi={quiz.categoryVi}
+          languageConfig={languageConfig}
+        />
+
+        {/* 2. CodeCard: macOS Window Header with Syntax Highlighting */}
+        <CodeCard code={quiz.code} languageConfig={languageConfig} />
+
+        {/* 3. CountdownBar: Dynamic Linear Countdown Bar with Numeric Timer */}
+        <CountdownBar startFrame={30} endFrame={210} />
+
+        {/* 4. OptionsGrid: 4-Option Trắc Nghiệm Grid with Highlight State */}
+        <OptionsGrid
+          question={quiz.question}
+          questionVi={quiz.questionVi}
+          options={quiz.options}
+          correctAnswer={quiz.correctAnswer}
+          revealFrame={210}
+        />
+
+        {/* 5. ExplanationCard: Bottom Breakdown of Gotcha & Call to Action */}
+        <div style={{ minHeight: 250 }}>
+          <ExplanationCard
+            correctAnswer={quiz.correctAnswer}
+            explanation={quiz.explanation}
+            explanationVi={quiz.explanationVi}
+            triggerFrame={210}
+          />
+        </div>
+      </div>
+    </div>
+  );
+};
