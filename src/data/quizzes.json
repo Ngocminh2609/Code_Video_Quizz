@@ -1,0 +1,147 @@
+[
+  {
+    "id": "python-mutable-default",
+    "hookTitle": "99% Miss This Python Logic!",
+    "language": "python",
+    "code": "def append_item(val, items=[]):\n    items.append(val)\n    return items\n\nprint(append_item(1))\nprint(append_item(2))",
+    "question": "What will be printed?",
+    "options": [
+      {
+        "key": "A",
+        "text": "[1] then [2]"
+      },
+      {
+        "key": "B",
+        "text": "[1] then [1, 2]"
+      },
+      {
+        "key": "C",
+        "text": "[1] then [2, 1]"
+      },
+      {
+        "key": "D",
+        "text": "TypeError: default modified"
+      }
+    ],
+    "correctAnswer": "B",
+    "explanation": "Default list arguments are created ONCE when the function is defined! Successive calls reuse the exact same mutable list in memory.",
+    "difficulty": "Medium",
+    "category": "Scope & Mutability"
+  },
+  {
+    "id": "javascript-array-coercion",
+    "hookTitle": "JavaScript Type Coercion Trap! 😱",
+    "language": "javascript",
+    "code": "const a = [1, 2];\nconst b = [3, 4];\n\nconsole.log(a + b);",
+    "question": "What will be the output?",
+    "options": [
+      {
+        "key": "A",
+        "text": "[1, 2, 3, 4]"
+      },
+      {
+        "key": "B",
+        "text": "'1,23,4'"
+      },
+      {
+        "key": "C",
+        "text": "'1, 2, 3, 4'"
+      },
+      {
+        "key": "D",
+        "text": "NaN"
+      }
+    ],
+    "correctAnswer": "B",
+    "explanation": "The '+' operator converts both arrays to strings ('1,2' and '3,4') and concatenates them, producing the string '1,23,4'!",
+    "difficulty": "Medium",
+    "category": "Type Coercion"
+  },
+  {
+    "id": "cpp-reference-reseat",
+    "hookTitle": "Can C++ References Be Re-bound? 🤔",
+    "language": "cpp",
+    "code": "int a = 10;\nint& ref = a;\nref = 20;\n\nint b = 30;\nref = b;\nb = 40;\n\nstd::cout << a << \" \" << ref;",
+    "question": "What will be printed to stdout?",
+    "options": [
+      {
+        "key": "A",
+        "text": "10 20"
+      },
+      {
+        "key": "B",
+        "text": "20 40"
+      },
+      {
+        "key": "C",
+        "text": "30 30"
+      },
+      {
+        "key": "D",
+        "text": "40 40"
+      }
+    ],
+    "correctAnswer": "C",
+    "explanation": "In C++, references cannot be reseated after initialization! 'ref = b' assigns the value of b (30) to variable a.",
+    "difficulty": "Hard",
+    "category": "Pointers & References"
+  },
+  {
+    "id": "java-integer-cache",
+    "hookTitle": "Senior Java Devs Even Fail This! ☕",
+    "language": "java",
+    "code": "Integer a = 127;\nInteger b = 127;\nInteger c = 128;\nInteger d = 128;\n\nSystem.out.println((a == b) + \" \" + (c == d));",
+    "question": "What is printed by println?",
+    "options": [
+      {
+        "key": "A",
+        "text": "true true"
+      },
+      {
+        "key": "B",
+        "text": "true false"
+      },
+      {
+        "key": "C",
+        "text": "false true"
+      },
+      {
+        "key": "D",
+        "text": "false false"
+      }
+    ],
+    "correctAnswer": "B",
+    "explanation": "Java caches Integer objects from -128 to 127. 128 creates separate heap instances, so reference equality (==) returns false!",
+    "difficulty": "Hard",
+    "category": "Object Caching"
+  },
+  {
+    "id": "python-tuple-in-place",
+    "hookTitle": "Can You Mutate Inside a Tuple? 🐍",
+    "language": "python",
+    "code": "t = ([1, 2], 'cool')\ntry:\n    t[0] += [3]\nexcept TypeError:\n    pass\n\nprint(t[0])",
+    "question": "What is the final value of t[0]?",
+    "options": [
+      {
+        "key": "A",
+        "text": "[1, 2]"
+      },
+      {
+        "key": "B",
+        "text": "[1, 2, 3]"
+      },
+      {
+        "key": "C",
+        "text": "TypeError crashes program"
+      },
+      {
+        "key": "D",
+        "text": "None"
+      }
+    ],
+    "correctAnswer": "B",
+    "explanation": "+= calls __iadd__ which extends the list in-place FIRST, then tries to assign back to the tuple which raises TypeError!",
+    "difficulty": "Extreme",
+    "category": "Data Structures"
+  }
+]
