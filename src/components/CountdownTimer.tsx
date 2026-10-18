@@ -37,7 +37,7 @@ export const CountdownTimer: React.FC<CountdownTimerProps> = ({
       : '#06b6d4'; // Cyan
 
   // Circular SVG params
-  const size = 110;
+  const size = 105;
   const strokeWidth = 8;
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
@@ -49,8 +49,8 @@ export const CountdownTimer: React.FC<CountdownTimerProps> = ({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        gap: 20,
-        margin: '18px 0',
+        gap: 18,
+        margin: '14px 0',
         zIndex: 15,
       }}
     >
@@ -102,11 +102,11 @@ export const CountdownTimer: React.FC<CountdownTimerProps> = ({
           }}
         >
           {isFinished ? (
-            <span style={{ fontSize: 36 }}>🎯</span>
+            <span style={{ fontSize: 34 }}>🎯</span>
           ) : (
             <div
               style={{
-                fontSize: 42,
+                fontSize: 40,
                 fontWeight: 900,
                 fontFamily: 'var(--font-sans)',
                 color: ringColor,
@@ -120,7 +120,7 @@ export const CountdownTimer: React.FC<CountdownTimerProps> = ({
         </div>
       </div>
 
-      {/* Dynamic Status Tag */}
+      {/* Dynamic Status Tag (Bilingual EN + VI) */}
       <div
         style={{
           display: 'flex',
@@ -130,24 +130,30 @@ export const CountdownTimer: React.FC<CountdownTimerProps> = ({
       >
         <div
           style={{
-            fontSize: 22,
+            fontSize: 21,
             fontWeight: 800,
-            letterSpacing: '0.05em',
+            letterSpacing: '0.04em',
             color: isFinished ? '#34d399' : isUrgent ? '#fb7185' : '#e2e8f0',
             textTransform: 'uppercase',
           }}
         >
-          {isFinished ? "Time's Up! Revealed 👇" : isUrgent ? 'Quick! Guess Now!' : 'Think Carefully...'}
+          {isFinished
+            ? "Time's Up! • Hết Giờ! 🎯"
+            : isUrgent
+              ? 'Quick! Guess Now! • Đoán Ngay!'
+              : 'Think Carefully... • Hãy Suy Nghĩ...'}
         </div>
         <div
           style={{
-            fontSize: 18,
+            fontSize: 17,
             color: '#94a3b8',
-            fontWeight: 500,
-            marginTop: 4,
+            fontWeight: 600,
+            marginTop: 3,
           }}
         >
-          {isFinished ? 'Check explanation below' : 'Lock in your answer!'}
+          {isFinished
+            ? 'Answer revealed below • Đáp án bên dưới 👇'
+            : 'Lock in your answer • Khóa câu trả lời của bạn!'}
         </div>
       </div>
     </div>

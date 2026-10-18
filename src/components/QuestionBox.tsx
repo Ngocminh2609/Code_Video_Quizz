@@ -4,6 +4,7 @@ import { QuizOption } from '../types/quiz';
 
 interface QuestionBoxProps {
   question: string;
+  questionVi?: string;
   options: QuizOption[];
   correctAnswer: 'A' | 'B' | 'C' | 'D';
   revealFrame?: number; // default 210
@@ -11,6 +12,7 @@ interface QuestionBoxProps {
 
 export const QuestionBox: React.FC<QuestionBoxProps> = ({
   question,
+  questionVi,
   options,
   correctAnswer,
   revealFrame = 210,
@@ -39,40 +41,58 @@ export const QuestionBox: React.FC<QuestionBoxProps> = ({
         zIndex: 20,
       }}
     >
-      {/* Question Heading Banner */}
+      {/* Bilingual Question Heading Banner */}
       <div
         style={{
           transform: `translateY(${titleY}px)`,
           opacity: titleOpacity,
           display: 'flex',
-          alignItems: 'center',
+          alignItems: 'flex-start',
           gap: 12,
-          marginBottom: 16,
-          paddingLeft: 8,
+          marginBottom: 14,
+          paddingLeft: 6,
         }}
       >
         <span
           style={{
-            fontSize: 28,
+            fontSize: 26,
             backgroundColor: 'rgba(99, 102, 241, 0.25)',
             border: '1px solid rgba(99, 102, 241, 0.4)',
             borderRadius: 12,
             padding: '6px 12px',
+            marginTop: 2,
           }}
         >
           ❓
         </span>
-        <span
-          style={{
-            fontSize: 32,
-            fontWeight: 800,
-            color: '#f8fafc',
-            letterSpacing: '-0.01em',
-            textShadow: '0 2px 10px rgba(0,0,0,0.5)',
-          }}
-        >
-          {question}
-        </span>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+          {/* English Question */}
+          <span
+            style={{
+              fontSize: 30,
+              fontWeight: 800,
+              color: '#f8fafc',
+              letterSpacing: '-0.01em',
+              textShadow: '0 2px 10px rgba(0,0,0,0.5)',
+              lineHeight: 1.25,
+            }}
+          >
+            {question}
+          </span>
+          {/* Vietnamese Question Translation */}
+          {questionVi && (
+            <span
+              style={{
+                fontSize: 23,
+                fontWeight: 700,
+                color: '#38bdf8', // Cyan translation label
+                lineHeight: 1.2,
+              }}
+            >
+              🇻🇳 {questionVi}
+            </span>
+          )}
+        </div>
       </div>
 
       {/* 4 Options Grid/Stack */}
@@ -80,7 +100,7 @@ export const QuestionBox: React.FC<QuestionBoxProps> = ({
         style={{
           display: 'grid',
           gridTemplateColumns: '1fr 1fr',
-          gap: 16,
+          gap: 14,
         }}
       >
         {options.map((opt, index) => {
@@ -117,13 +137,13 @@ export const QuestionBox: React.FC<QuestionBoxProps> = ({
             : optOpacity;
 
           // Background styles depending on state
-          let backgroundColor = 'rgba(23, 28, 45, 0.75)';
+          let backgroundColor = 'rgba(23, 28, 45, 0.78)';
           let borderColor = 'rgba(255, 255, 255, 0.1)';
           let boxShadow = '0 8px 24px rgba(0, 0, 0, 0.4)';
 
           if (isRevealed) {
             if (isCorrect) {
-              backgroundColor = 'rgba(16, 185, 129, 0.35)';
+              backgroundColor = 'rgba(16, 185, 129, 0.38)';
               borderColor = '#10b981';
               boxShadow =
                 '0 0 35px rgba(16, 185, 129, 0.6), inset 0 0 20px rgba(16, 185, 129, 0.3)';
@@ -142,10 +162,10 @@ export const QuestionBox: React.FC<QuestionBoxProps> = ({
                 backgroundColor,
                 border: `2px solid ${borderColor}`,
                 borderRadius: 18,
-                padding: '18px 20px',
+                padding: '16px 18px',
                 display: 'flex',
                 alignItems: 'center',
-                gap: 16,
+                gap: 14,
                 boxShadow,
                 backdropFilter: 'blur(12px)',
                 WebkitBackdropFilter: 'blur(12px)',
@@ -154,13 +174,13 @@ export const QuestionBox: React.FC<QuestionBoxProps> = ({
               {/* Option Key Badge [A], [B], [C], [D] */}
               <div
                 style={{
-                  width: 48,
-                  height: 48,
+                  width: 44,
+                  height: 44,
                   borderRadius: 12,
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  fontSize: 24,
+                  fontSize: 23,
                   fontWeight: 900,
                   backgroundColor:
                     isRevealed && isCorrect
@@ -180,19 +200,39 @@ export const QuestionBox: React.FC<QuestionBoxProps> = ({
                 {isRevealed && isCorrect ? '✓' : opt.key}
               </div>
 
-              {/* Option Text */}
+              {/* Option Text (Bilingual support) */}
               <div
                 style={{
-                  fontSize: 25,
-                  fontWeight: 700,
-                  fontFamily: 'var(--font-mono)',
-                  color: isRevealed && isCorrect ? '#ffffff' : '#e2e8f0',
-                  lineHeight: 1.3,
-                  wordBreak: 'break-word',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: 2,
                   flex: 1,
                 }}
               >
-                {opt.text}
+                <div
+                  style={{
+                    fontSize: 24,
+                    fontWeight: 700,
+                    fontFamily: 'var(--font-mono)',
+                    color: isRevealed && isCorrect ? '#ffffff' : '#e2e8f0',
+                    lineHeight: 1.25,
+                    wordBreak: 'break-word',
+                  }}
+                >
+                  {opt.text}
+                </div>
+                {opt.textVi && opt.textVi !== opt.text && (
+                  <div
+                    style={{
+                      fontSize: 18,
+                      fontWeight: 600,
+                      color: isRevealed && isCorrect ? '#a7f3d0' : '#94a3b8',
+                      lineHeight: 1.2,
+                    }}
+                  >
+                    ({opt.textVi})
+                  </div>
+                )}
               </div>
 
               {/* Reveal Check / Cross Tag */}
@@ -203,7 +243,7 @@ export const QuestionBox: React.FC<QuestionBoxProps> = ({
                     color: '#ffffff',
                     borderRadius: 8,
                     padding: '4px 8px',
-                    fontSize: 16,
+                    fontSize: 15,
                     fontWeight: 900,
                     letterSpacing: '0.05em',
                   }}

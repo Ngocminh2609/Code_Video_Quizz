@@ -26,8 +26,8 @@ export const QuizVideo: React.FC<QuizVideoProps> = ({ quiz }) => {
         display: 'flex',
         flexDirection: 'column',
         boxSizing: 'border-box',
-        paddingTop: 80,
-        paddingBottom: 60,
+        paddingTop: 70,
+        paddingBottom: 50,
       }}
     >
       {/* Dynamic Animated Background */}
@@ -47,33 +47,38 @@ export const QuizVideo: React.FC<QuizVideoProps> = ({ quiz }) => {
           justifyContent: 'space-between',
         }}
       >
-        {/* Top: Header Hook & Badges */}
+        {/* Top: Header Hook & Badges (Bilingual) */}
         <HeaderHook
           hookTitle={quiz.hookTitle}
+          hookTitleVi={quiz.hookTitleVi}
           difficulty={quiz.difficulty}
+          difficultyVi={quiz.difficultyVi}
           category={quiz.category}
+          categoryVi={quiz.categoryVi}
           languageConfig={languageConfig}
         />
 
         {/* Upper-Middle: Sleek Code Terminal with Prism Highlighting */}
         <CodeWindow code={quiz.code} languageConfig={languageConfig} />
 
-        {/* Center: Dynamic Countdown Timer */}
+        {/* Center: Dynamic Countdown Timer (Bilingual) */}
         <CountdownTimer startFrame={30} endFrame={210} />
 
-        {/* Lower-Middle: Question & Options Grid */}
+        {/* Lower-Middle: Question & Options Grid (Bilingual) */}
         <QuestionBox
           question={quiz.question}
+          questionVi={quiz.questionVi}
           options={quiz.options}
           correctAnswer={quiz.correctAnswer}
           revealFrame={210}
         />
 
-        {/* Bottom: Explanation Card (Appears at frame 210) */}
+        {/* Bottom: Explanation Card (Bilingual EN + VI) */}
         <div style={{ minHeight: 250 }}>
           <ExplanationCard
             correctAnswer={quiz.correctAnswer}
             explanation={quiz.explanation}
+            explanationVi={quiz.explanationVi}
             triggerFrame={210}
           />
         </div>

@@ -1,147 +1,197 @@
 [
   {
     "id": "python-mutable-default",
+    "folderNameVi": "01_Python_Gia_Tri_Mac_Dinh_List",
     "hookTitle": "99% Miss This Python Logic!",
+    "hookTitleVi": "99% Lập Trình Viên Mắc Bẫy Này! 🐍",
     "language": "python",
     "code": "def append_item(val, items=[]):\n    items.append(val)\n    return items\n\nprint(append_item(1))\nprint(append_item(2))",
     "question": "What will be printed?",
+    "questionVi": "Kết quả in ra màn hình là gì?",
     "options": [
       {
         "key": "A",
-        "text": "[1] then [2]"
+        "text": "[1] then [2]",
+        "textVi": "[1] rồi đến [2]"
       },
       {
         "key": "B",
-        "text": "[1] then [1, 2]"
+        "text": "[1] then [1, 2]",
+        "textVi": "[1] rồi đến [1, 2]"
       },
       {
         "key": "C",
-        "text": "[1] then [2, 1]"
+        "text": "[1] then [2, 1]",
+        "textVi": "[1] rồi đến [2, 1]"
       },
       {
         "key": "D",
-        "text": "TypeError: default modified"
+        "text": "TypeError: modified",
+        "textVi": "Lỗi TypeError"
       }
     ],
     "correctAnswer": "B",
     "explanation": "Default list arguments are created ONCE when the function is defined! Successive calls reuse the exact same mutable list in memory.",
+    "explanationVi": "Trong Python, đối số mặc định chỉ được tạo 1 LẦN DUY NHẤT khi định nghĩa hàm! Các lần gọi tiếp theo dùng chung đối tượng danh sách này trong bộ nhớ.",
     "difficulty": "Medium",
-    "category": "Scope & Mutability"
+    "difficultyVi": "Vừa",
+    "category": "Scope & Mutability",
+    "categoryVi": "Phạm Vi & Tính Biến Đổi"
   },
   {
     "id": "javascript-array-coercion",
+    "folderNameVi": "02_JavaScript_Ep_Kieu_Cong_Mang",
     "hookTitle": "JavaScript Type Coercion Trap! 😱",
+    "hookTitleVi": "Cú Lừa Ép Kiểu Trong JavaScript! ⚡",
     "language": "javascript",
     "code": "const a = [1, 2];\nconst b = [3, 4];\n\nconsole.log(a + b);",
     "question": "What will be the output?",
+    "questionVi": "Đầu ra console.log là gì?",
     "options": [
       {
         "key": "A",
-        "text": "[1, 2, 3, 4]"
+        "text": "[1, 2, 3, 4]",
+        "textVi": "Mảng [1, 2, 3, 4]"
       },
       {
         "key": "B",
-        "text": "'1,23,4'"
+        "text": "'1,23,4'",
+        "textVi": "Chuỗi '1,23,4'"
       },
       {
         "key": "C",
-        "text": "'1, 2, 3, 4'"
+        "text": "'1, 2, 3, 4'",
+        "textVi": "Chuỗi '1, 2, 3, 4'"
       },
       {
         "key": "D",
-        "text": "NaN"
+        "text": "NaN",
+        "textVi": "Giá trị NaN"
       }
     ],
     "correctAnswer": "B",
-    "explanation": "The '+' operator converts both arrays to strings ('1,2' and '3,4') and concatenates them, producing the string '1,23,4'!",
+    "explanation": "The '+' operator converts both arrays to strings ('1,2' and '3,4') and concatenates them into '1,23,4'!",
+    "explanationVi": "Toán tử '+' ép kiểu cả hai mảng thành chuỗi ('1,2' và '3,4') rồi nối lại thành chuỗi '1,23,4'!",
     "difficulty": "Medium",
-    "category": "Type Coercion"
+    "difficultyVi": "Vừa",
+    "category": "Type Coercion",
+    "categoryVi": "Ép Kiểu Dữ Liệu"
   },
   {
     "id": "cpp-reference-reseat",
+    "folderNameVi": "03_CPP_Tham_Chieu_Khong_The_Gan_Lai",
     "hookTitle": "Can C++ References Be Re-bound? 🤔",
+    "hookTitleVi": "Tham Chiếu C++ Có Thể Gán Lại Không? ⚙️",
     "language": "cpp",
     "code": "int a = 10;\nint& ref = a;\nref = 20;\n\nint b = 30;\nref = b;\nb = 40;\n\nstd::cout << a << \" \" << ref;",
     "question": "What will be printed to stdout?",
+    "questionVi": "Giá trị in ra màn hình là gì?",
     "options": [
       {
         "key": "A",
-        "text": "10 20"
+        "text": "10 20",
+        "textVi": "10 20"
       },
       {
         "key": "B",
-        "text": "20 40"
+        "text": "20 40",
+        "textVi": "20 40"
       },
       {
         "key": "C",
-        "text": "30 30"
+        "text": "30 30",
+        "textVi": "30 30"
       },
       {
         "key": "D",
-        "text": "40 40"
+        "text": "40 40",
+        "textVi": "40 40"
       }
     ],
     "correctAnswer": "C",
     "explanation": "In C++, references cannot be reseated after initialization! 'ref = b' assigns the value of b (30) to variable a.",
+    "explanationVi": "Trong C++, tham chiếu không thể gán lại sau khi khởi tạo! 'ref = b' gán giá trị của b (30) vào biến a.",
     "difficulty": "Hard",
-    "category": "Pointers & References"
+    "difficultyVi": "Khó",
+    "category": "Pointers & References",
+    "categoryVi": "Con Trỏ & Tham Chiếu"
   },
   {
     "id": "java-integer-cache",
+    "folderNameVi": "04_Java_Bo_Nho_Dem_Integer_Cache",
     "hookTitle": "Senior Java Devs Even Fail This! ☕",
+    "hookTitleVi": "Dev Java Lâu Năm Vẫn Trả Lời Sai! ☕",
     "language": "java",
     "code": "Integer a = 127;\nInteger b = 127;\nInteger c = 128;\nInteger d = 128;\n\nSystem.out.println((a == b) + \" \" + (c == d));",
     "question": "What is printed by println?",
+    "questionVi": "Lệnh println in ra kết quả gì?",
     "options": [
       {
         "key": "A",
-        "text": "true true"
+        "text": "true true",
+        "textVi": "true true"
       },
       {
         "key": "B",
-        "text": "true false"
+        "text": "true false",
+        "textVi": "true false"
       },
       {
         "key": "C",
-        "text": "false true"
+        "text": "false true",
+        "textVi": "false true"
       },
       {
         "key": "D",
-        "text": "false false"
+        "text": "false false",
+        "textVi": "false false"
       }
     ],
     "correctAnswer": "B",
     "explanation": "Java caches Integer objects from -128 to 127. 128 creates separate heap instances, so reference equality (==) returns false!",
+    "explanationVi": "Java lưu bộ nhớ đệm (cache) Integer từ -128 đến 127. Với giá trị 128, JVM tạo 2 đối tượng mới, nên so sánh tham chiếu (==) cho kết quả false!",
     "difficulty": "Hard",
-    "category": "Object Caching"
+    "difficultyVi": "Khó",
+    "category": "Object Caching",
+    "categoryVi": "Bộ Nhớ Đệm Đối Tượng"
   },
   {
     "id": "python-tuple-in-place",
+    "folderNameVi": "05_Python_Bien_Doi_List_Trong_Tuple",
     "hookTitle": "Can You Mutate Inside a Tuple? 🐍",
+    "hookTitleVi": "Biến Đổi Danh Sách Bên Trong Tuple? 🐍",
     "language": "python",
     "code": "t = ([1, 2], 'cool')\ntry:\n    t[0] += [3]\nexcept TypeError:\n    pass\n\nprint(t[0])",
     "question": "What is the final value of t[0]?",
+    "questionVi": "Giá trị cuối cùng của t[0] là gì?",
     "options": [
       {
         "key": "A",
-        "text": "[1, 2]"
+        "text": "[1, 2]",
+        "textVi": "[1, 2]"
       },
       {
         "key": "B",
-        "text": "[1, 2, 3]"
+        "text": "[1, 2, 3]",
+        "textVi": "[1, 2, 3]"
       },
       {
         "key": "C",
-        "text": "TypeError crashes program"
+        "text": "TypeError crashes",
+        "textVi": "Lỗi TypeError dừng app"
       },
       {
         "key": "D",
-        "text": "None"
+        "text": "None",
+        "textVi": "None"
       }
     ],
     "correctAnswer": "B",
-    "explanation": "+= calls __iadd__ which extends the list in-place FIRST, then tries to assign back to the tuple which raises TypeError!",
+    "explanation": "+= calls __iadd__ which extends the list in-place FIRST, then raises TypeError when attempting to assign back to the tuple!",
+    "explanationVi": "+= gọi phương thức __iadd__ mở rộng list ngay tại chỗ TRƯỚC, sau đó mới văng lỗi TypeError khi cố gán lại vào tuple!",
     "difficulty": "Extreme",
-    "category": "Data Structures"
+    "difficultyVi": "Cực Khó",
+    "category": "Data Structures",
+    "categoryVi": "Cấu Trúc Dữ Liệu"
   }
 ]

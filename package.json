@@ -28,8 +28,9 @@
   },
   "scripts": {
     "dev": "remotion studio",
-    "render": "remotion render src/index.ts MainQuiz out/quiz.mp4",
+    "render": "node scripts/renderAll.mjs --first",
     "render:all": "node scripts/renderAll.mjs",
+    "render:single": "remotion render src/index.ts MainQuiz out/quiz.mp4",
     "render:still": "remotion still src/index.ts MainQuiz out/preview.png --frame=240",
     "build": "remotion bundle",
     "upgrade": "remotion upgrade",

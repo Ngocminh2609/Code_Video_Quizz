@@ -4,12 +4,14 @@ import { interpolate, spring, useCurrentFrame, useVideoConfig } from 'remotion';
 interface ExplanationCardProps {
   correctAnswer: 'A' | 'B' | 'C' | 'D';
   explanation: string;
+  explanationVi?: string;
   triggerFrame?: number; // default 210
 }
 
 export const ExplanationCard: React.FC<ExplanationCardProps> = ({
   correctAnswer,
   explanation,
+  explanationVi,
   triggerFrame = 210,
 }) => {
   const frame = useCurrentFrame();
@@ -39,47 +41,47 @@ export const ExplanationCard: React.FC<ExplanationCardProps> = ({
         transform: `translateY(${translateY}px)`,
         opacity,
         width: '92%',
-        margin: '22px auto 0 auto',
+        margin: '16px auto 0 auto',
         zIndex: 25,
       }}
     >
       <div
         className="glass-panel"
         style={{
-          borderRadius: 24,
-          padding: '24px 28px',
+          borderRadius: 22,
+          padding: '20px 24px',
           border: '1.5px solid rgba(16, 185, 129, 0.4)',
-          background: 'rgba(15, 23, 42, 0.92)',
-          boxShadow: '0 20px 50px rgba(0, 0, 0, 0.7), 0 0 35px rgba(16, 185, 129, 0.25)',
+          background: 'rgba(15, 23, 42, 0.94)',
+          boxShadow: '0 20px 50px rgba(0, 0, 0, 0.75), 0 0 35px rgba(16, 185, 129, 0.25)',
         }}
       >
-        {/* Header Tag */}
+        {/* Header Tag Row */}
         <div
           style={{
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            marginBottom: 14,
+            marginBottom: 12,
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <span
               style={{
-                backgroundColor: 'rgba(16, 185, 129, 0.2)',
-                border: '1px solid #10b981',
+                backgroundColor: 'rgba(16, 185, 129, 0.25)',
+                border: '1.5px solid #10b981',
                 color: '#34d399',
-                padding: '6px 14px',
+                padding: '5px 14px',
                 borderRadius: 9999,
-                fontSize: 20,
+                fontSize: 19,
                 fontWeight: 900,
                 letterSpacing: '0.04em',
               }}
             >
-              ANSWER: {correctAnswer}
+              ANSWER: {correctAnswer} • ĐÁP ÁN: {correctAnswer}
             </span>
             <span
               style={{
-                fontSize: 20,
+                fontSize: 19,
                 fontWeight: 800,
                 color: '#fbbf24',
               }}
@@ -90,35 +92,50 @@ export const ExplanationCard: React.FC<ExplanationCardProps> = ({
 
           <div
             style={{
-              fontSize: 16,
-              fontWeight: 700,
-              color: '#94a3b8',
+              fontSize: 15,
+              fontWeight: 800,
+              color: '#38bdf8',
               letterSpacing: '0.05em',
             }}
           >
-            EXPLANATION
+            BILINGUAL • SONG NGỮ
           </div>
         </div>
 
-        {/* Explanation Text */}
+        {/* English Explanation */}
         <p
           style={{
-            margin: 0,
-            fontSize: 24,
-            lineHeight: 1.5,
+            margin: '0 0 8px 0',
+            fontSize: 22,
+            lineHeight: 1.4,
             color: '#f1f5f9',
             fontWeight: 500,
           }}
         >
-          {explanation}
+          🇬🇧 {explanation}
         </p>
 
-        {/* Call to Action Footer */}
+        {/* Vietnamese Explanation */}
+        {explanationVi && (
+          <p
+            style={{
+              margin: '0 0 4px 0',
+              fontSize: 22,
+              lineHeight: 1.4,
+              color: '#fde047', // Warm highlight for Vietnamese
+              fontWeight: 600,
+            }}
+          >
+            🇻🇳 {explanationVi}
+          </p>
+        )}
+
+        {/* Bilingual Call to Action Footer */}
         <div
           style={{
-            marginTop: 18,
-            paddingTop: 14,
-            borderTop: '1px solid rgba(255, 255, 255, 0.08)',
+            marginTop: 12,
+            paddingTop: 10,
+            borderTop: '1px solid rgba(255, 255, 255, 0.1)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
@@ -126,17 +143,17 @@ export const ExplanationCard: React.FC<ExplanationCardProps> = ({
         >
           <div
             style={{
-              fontSize: 20,
+              fontSize: 18,
               fontWeight: 800,
               color: '#38bdf8',
               letterSpacing: '0.02em',
             }}
           >
-            🔥 Did you get it right? Comment below! 👇
+            💬 Comment your score! • Bạn đoán đúng không? 👇
           </div>
           <div
             style={{
-              fontSize: 18,
+              fontSize: 17,
               fontWeight: 700,
               color: '#a855f7',
             }}
