@@ -2,6 +2,8 @@
 
 A production-ready Remotion project built with React, TypeScript, TailwindCSS, and `prism-react-renderer` that automatically generates high-converting, viral programming quiz videos for **TikTok, Instagram Reels, and YouTube Shorts** (1080x1920 vertical format).
 
+> 📖 *English Documentation | [**Bản Tiếng Việt (Vietnamese Guide)**](README_VI.md)*
+
 ---
 
 ## 🚀 Key Specifications
