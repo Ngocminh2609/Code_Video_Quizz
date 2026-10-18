@@ -12,6 +12,13 @@ import { Confetti } from './components/Confetti';
 export const QuizComposition: React.FC<QuizCompositionProps> = ({ quiz }) => {
   const languageConfig = LANGUAGE_CONFIGS[quiz.language] || LANGUAGE_CONFIGS.python;
 
+  // Use pure Vietnamese text throughout the video
+  const hookTitle = quiz.hookTitleVi || quiz.hookTitle;
+  const difficulty = quiz.difficultyVi || quiz.difficulty || 'CƠ BẢN';
+  const category = quiz.categoryVi || quiz.category;
+  const question = quiz.questionVi || quiz.question;
+  const explanation = quiz.explanationVi || quiz.explanation;
+
   return (
     <div
       style={{
@@ -43,14 +50,11 @@ export const QuizComposition: React.FC<QuizCompositionProps> = ({ quiz }) => {
           justifyContent: 'space-between',
         }}
       >
-        {/* 1. Header Hook: Viral Badge, Hook Title & Language Badges */}
+        {/* 1. Header Hook: Badge, Pure Vietnamese Hook Title & Category */}
         <HeaderHook
-          hookTitle={quiz.hookTitle}
-          hookTitleVi={quiz.hookTitleVi}
-          difficulty={quiz.difficulty}
-          difficultyVi={quiz.difficultyVi}
-          category={quiz.category}
-          categoryVi={quiz.categoryVi}
+          hookTitle={hookTitle}
+          difficulty={difficulty}
+          category={category}
           languageConfig={languageConfig}
         />
 
@@ -62,8 +66,7 @@ export const QuizComposition: React.FC<QuizCompositionProps> = ({ quiz }) => {
 
         {/* 4. OptionsGrid: 4-Option Trắc Nghiệm Grid with Highlight State */}
         <OptionsGrid
-          question={quiz.question}
-          questionVi={quiz.questionVi}
+          question={question}
           options={quiz.options}
           correctAnswer={quiz.correctAnswer}
           revealFrame={210}
@@ -73,8 +76,7 @@ export const QuizComposition: React.FC<QuizCompositionProps> = ({ quiz }) => {
         <div style={{ minHeight: 250 }}>
           <ExplanationCard
             correctAnswer={quiz.correctAnswer}
-            explanation={quiz.explanation}
-            explanationVi={quiz.explanationVi}
+            explanation={explanation}
             triggerFrame={210}
           />
         </div>

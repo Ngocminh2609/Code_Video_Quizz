@@ -50,19 +50,19 @@ for (let i = 0; i < quizzesToProcess.length; i++) {
   console.log(`   Ngôn ngữ:   ${quiz.language.toUpperCase()}`);
 
   try {
-    // 1. Render Video MP4 (10s, 300 frames, 1080x1920)
-    console.log(`   🎥 Đang render video: video_hoan_chinh.mp4...`);
-    const cmdVideo = `npx remotion render src/index.ts "${quiz.id}" "${videoPath}" --concurrency=4`;
+    // 1. Render Video MP4 (10s, 300 frames, 1080x1920, Lossless PNG frame buffer, CRF 14)
+    console.log(`   🎥 Đang render video độ nét cao: video_hoan_chinh.mp4...`);
+    const cmdVideo = `npx remotion render src/index.ts "${quiz.id}" "${videoPath}" --image-format=png --crf=14 --pixel-format=yuv420p --concurrency=4`;
     execSync(cmdVideo, { cwd: projectRoot, stdio: 'inherit' });
 
     // 2. Render ảnh đếm ngược (frame 100)
     console.log(`   📸 Đang render ảnh đếm ngược: anh_dem_nguoc.png (frame 100)...`);
-    const cmdCountdown = `npx remotion still src/index.ts "${quiz.id}" "${countdownImgPath}" --frame=100`;
+    const cmdCountdown = `npx remotion still src/index.ts "${quiz.id}" "${countdownImgPath}" --image-format=png --frame=100`;
     execSync(cmdCountdown, { cwd: projectRoot, stdio: 'inherit' });
 
     // 3. Render ảnh công bố đáp án & thẻ giải thích (frame 240)
     console.log(`   📸 Đang render ảnh công bố đáp án: anh_cong_bo_dap_an.png (frame 240)...`);
-    const cmdReveal = `npx remotion still src/index.ts "${quiz.id}" "${revealImgPath}" --frame=240`;
+    const cmdReveal = `npx remotion still src/index.ts "${quiz.id}" "${revealImgPath}" --image-format=png --frame=240`;
     execSync(cmdReveal, { cwd: projectRoot, stdio: 'inherit' });
 
     // 4. Lưu metadata thông tin câu đố JSON

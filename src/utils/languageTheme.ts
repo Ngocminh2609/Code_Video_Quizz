@@ -1,4 +1,4 @@
-import { Language } from '../types/quiz';
+import { Language } from '../types';
 
 export interface LanguageConfig {
   name: string;
@@ -16,7 +16,7 @@ export interface LanguageConfig {
 export const LANGUAGE_CONFIGS: Record<Language, LanguageConfig> = {
   python: {
     name: 'Python',
-    badge: '🐍 Python 3.12',
+    badge: '🐍 Python',
     tag: 'PYTHON',
     filename: 'main.py',
     prismLang: 'python',
@@ -28,7 +28,7 @@ export const LANGUAGE_CONFIGS: Record<Language, LanguageConfig> = {
   },
   javascript: {
     name: 'JavaScript',
-    badge: '⚡ JavaScript ES2024',
+    badge: '⚡ JavaScript',
     tag: 'JS',
     filename: 'index.js',
     prismLang: 'javascript',
@@ -40,7 +40,7 @@ export const LANGUAGE_CONFIGS: Record<Language, LanguageConfig> = {
   },
   cpp: {
     name: 'C++',
-    badge: '⚙️ C++20',
+    badge: '⚙️ C++',
     tag: 'C++',
     filename: 'main.cpp',
     prismLang: 'cpp',
@@ -52,7 +52,7 @@ export const LANGUAGE_CONFIGS: Record<Language, LanguageConfig> = {
   },
   java: {
     name: 'Java',
-    badge: '☕ Java 21',
+    badge: '☕ Java',
     tag: 'JAVA',
     filename: 'Main.java',
     prismLang: 'java',

@@ -48,7 +48,7 @@ export const CountdownBar: React.FC<CountdownBarProps> = ({
     <div
       style={{
         width: '92%',
-        margin: '12px auto',
+        margin: '14px auto',
         display: 'flex',
         flexDirection: 'column',
         gap: 10,
@@ -63,12 +63,12 @@ export const CountdownBar: React.FC<CountdownBarProps> = ({
           justifyContent: 'space-between',
         }}
       >
-        {/* Status Text (Bilingual) */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <span style={{ fontSize: 22 }}>{isFinished ? '🎯' : isUrgent ? '⚡' : '⏱️'}</span>
+        {/* Status Text in Pure Vietnamese */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <span style={{ fontSize: 24 }}>{isFinished ? '🎯' : isUrgent ? '⚡' : '⏱️'}</span>
           <span
             style={{
-              fontSize: 21,
+              fontSize: 23,
               fontWeight: 800,
               color: isFinished ? '#34d399' : isUrgent ? '#fb7185' : '#e2e8f0',
               letterSpacing: '0.04em',
@@ -76,10 +76,10 @@ export const CountdownBar: React.FC<CountdownBarProps> = ({
             }}
           >
             {isFinished
-              ? "Time's Up! • Hết Giờ!"
+              ? 'HẾT GIỜ! ĐÁP ÁN 👇'
               : isUrgent
-                ? 'Quick! Guess Now! • Đoán Ngay!'
-                : 'Think Carefully • Hãy Suy Nghĩ...'}
+                ? 'NHANH TAY ĐOÁN NGAY!'
+                : 'HÃY SUY NGHĨ KỸ...'}
           </span>
         </div>
 
@@ -87,11 +87,11 @@ export const CountdownBar: React.FC<CountdownBarProps> = ({
         <div
           style={{
             transform: `scale(${heartbeat})`,
-            backgroundColor: 'rgba(15, 23, 42, 0.85)',
+            backgroundColor: 'rgba(15, 23, 42, 0.9)',
             border: `2px solid ${barColor}`,
             boxShadow: glowShadow,
             borderRadius: 9999,
-            padding: '4px 18px',
+            padding: '4px 20px',
             display: 'flex',
             alignItems: 'center',
             gap: 6,
@@ -99,7 +99,7 @@ export const CountdownBar: React.FC<CountdownBarProps> = ({
         >
           <span
             style={{
-              fontSize: 26,
+              fontSize: 28,
               fontWeight: 900,
               fontFamily: 'var(--font-mono)',
               color: barColor,
@@ -116,12 +116,12 @@ export const CountdownBar: React.FC<CountdownBarProps> = ({
         style={{
           position: 'relative',
           width: '100%',
-          height: 14,
+          height: 15,
           borderRadius: 9999,
           backgroundColor: 'rgba(255, 255, 255, 0.08)',
-          border: '1px solid rgba(255, 255, 255, 0.1)',
+          border: '1px solid rgba(255, 255, 255, 0.12)',
           overflow: 'hidden',
-          boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.4)',
+          boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.5)',
         }}
       >
         <div

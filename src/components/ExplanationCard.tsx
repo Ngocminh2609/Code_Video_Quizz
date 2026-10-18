@@ -4,14 +4,12 @@ import { interpolate, spring, useCurrentFrame, useVideoConfig } from 'remotion';
 interface ExplanationCardProps {
   correctAnswer: 'A' | 'B' | 'C' | 'D';
   explanation: string;
-  explanationVi?: string;
   triggerFrame?: number; // default 210
 }
 
 export const ExplanationCard: React.FC<ExplanationCardProps> = ({
   correctAnswer,
   explanation,
-  explanationVi,
   triggerFrame = 210,
 }) => {
   const frame = useCurrentFrame();
@@ -49,10 +47,10 @@ export const ExplanationCard: React.FC<ExplanationCardProps> = ({
         className="glass-panel"
         style={{
           borderRadius: 22,
-          padding: '20px 24px',
-          border: '1.5px solid rgba(16, 185, 129, 0.4)',
-          background: 'rgba(15, 23, 42, 0.94)',
-          boxShadow: '0 20px 50px rgba(0, 0, 0, 0.75), 0 0 35px rgba(16, 185, 129, 0.25)',
+          padding: '24px 28px',
+          border: '1.5px solid rgba(16, 185, 129, 0.45)',
+          background: 'rgba(15, 23, 42, 0.95)',
+          boxShadow: '0 20px 50px rgba(0, 0, 0, 0.8), 0 0 35px rgba(16, 185, 129, 0.25)',
         }}
       >
         {/* Header Tag Row */}
@@ -61,80 +59,65 @@ export const ExplanationCard: React.FC<ExplanationCardProps> = ({
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            marginBottom: 12,
+            marginBottom: 14,
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
             <span
               style={{
                 backgroundColor: 'rgba(16, 185, 129, 0.25)',
                 border: '1.5px solid #10b981',
                 color: '#34d399',
-                padding: '5px 14px',
+                padding: '6px 16px',
                 borderRadius: 9999,
-                fontSize: 19,
+                fontSize: 22,
                 fontWeight: 900,
                 letterSpacing: '0.04em',
               }}
             >
-              ANSWER: {correctAnswer} • ĐÁP ÁN: {correctAnswer}
+              ĐÁP ÁN: {correctAnswer}
             </span>
             <span
               style={{
-                fontSize: 19,
+                fontSize: 22,
                 fontWeight: 800,
                 color: '#fbbf24',
               }}
             >
-              💡 HOW IT WORKS:
+              💡 GIẢI THÍCH CHI TIẾT:
             </span>
           </div>
 
           <div
             style={{
-              fontSize: 15,
+              fontSize: 18,
               fontWeight: 800,
               color: '#38bdf8',
-              letterSpacing: '0.05em',
+              letterSpacing: '0.04em',
             }}
           >
-            BILINGUAL • SONG NGỮ
+            KIẾN THỨC
           </div>
         </div>
 
-        {/* English Explanation */}
+        {/* Pure Vietnamese Explanation Content */}
         <p
           style={{
-            margin: '0 0 8px 0',
-            fontSize: 22,
-            lineHeight: 1.4,
-            color: '#f1f5f9',
-            fontWeight: 500,
+            margin: '0 0 12px 0',
+            fontSize: 25,
+            lineHeight: 1.5,
+            color: '#f8fafc',
+            fontWeight: 600,
+            textShadow: '0 1px 4px rgba(0,0,0,0.5)',
           }}
         >
-          🇬🇧 {explanation}
+          {explanation}
         </p>
 
-        {/* Vietnamese Explanation */}
-        {explanationVi && (
-          <p
-            style={{
-              margin: '0 0 4px 0',
-              fontSize: 22,
-              lineHeight: 1.4,
-              color: '#fde047', // Warm highlight for Vietnamese
-              fontWeight: 600,
-            }}
-          >
-            🇻🇳 {explanationVi}
-          </p>
-        )}
-
-        {/* Bilingual Call to Action Footer */}
+        {/* Call to Action Footer */}
         <div
           style={{
-            marginTop: 12,
-            paddingTop: 10,
+            paddingTop: 12,
             borderTop: '1px solid rgba(255, 255, 255, 0.1)',
             display: 'flex',
             alignItems: 'center',
@@ -143,22 +126,22 @@ export const ExplanationCard: React.FC<ExplanationCardProps> = ({
         >
           <div
             style={{
-              fontSize: 18,
+              fontSize: 20,
               fontWeight: 800,
               color: '#38bdf8',
               letterSpacing: '0.02em',
             }}
           >
-            💬 Comment your score! • Bạn đoán đúng không? 👇
+            💬 Bạn đoán đúng không? Để lại bình luận nhé! 👇
           </div>
           <div
             style={{
-              fontSize: 17,
+              fontSize: 19,
               fontWeight: 700,
               color: '#a855f7',
             }}
           >
-            #CodingQuiz
+            #HocLapTrinh
           </div>
         </div>
       </div>

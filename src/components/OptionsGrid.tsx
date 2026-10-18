@@ -4,7 +4,6 @@ import { QuizOption } from '../types';
 
 interface OptionsGridProps {
   question: string;
-  questionVi?: string;
   options: QuizOption[];
   correctAnswer: 'A' | 'B' | 'C' | 'D';
   revealFrame?: number; // default 210
@@ -12,7 +11,6 @@ interface OptionsGridProps {
 
 export const OptionsGrid: React.FC<OptionsGridProps> = ({
   question,
-  questionVi,
   options,
   correctAnswer,
   revealFrame = 210,
@@ -41,58 +39,41 @@ export const OptionsGrid: React.FC<OptionsGridProps> = ({
         zIndex: 20,
       }}
     >
-      {/* Question Heading Banner */}
+      {/* Question Heading Banner in Pure Vietnamese */}
       <div
         style={{
           transform: `translateY(${titleY}px)`,
           opacity: titleOpacity,
           display: 'flex',
-          alignItems: 'flex-start',
+          alignItems: 'center',
           gap: 12,
-          marginBottom: 14,
+          marginBottom: 16,
           paddingLeft: 6,
         }}
       >
         <span
           style={{
-            fontSize: 26,
+            fontSize: 28,
             backgroundColor: 'rgba(99, 102, 241, 0.25)',
-            border: '1px solid rgba(99, 102, 241, 0.4)',
+            border: '1px solid rgba(99, 102, 241, 0.45)',
             borderRadius: 12,
-            padding: '6px 12px',
-            marginTop: 2,
+            padding: '6px 14px',
           }}
         >
           ❓
         </span>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-          {/* Question Text */}
-          <span
-            style={{
-              fontSize: 30,
-              fontWeight: 800,
-              color: '#f8fafc',
-              letterSpacing: '-0.01em',
-              textShadow: '0 2px 10px rgba(0,0,0,0.5)',
-              lineHeight: 1.25,
-            }}
-          >
-            {question}
-          </span>
-          {/* Vietnamese Sub-title */}
-          {questionVi && (
-            <span
-              style={{
-                fontSize: 23,
-                fontWeight: 700,
-                color: '#38bdf8',
-                lineHeight: 1.2,
-              }}
-            >
-              🇻🇳 {questionVi}
-            </span>
-          )}
-        </div>
+        <span
+          style={{
+            fontSize: 34,
+            fontWeight: 800,
+            color: '#f8fafc',
+            letterSpacing: '-0.01em',
+            textShadow: '0 2px 12px rgba(0,0,0,0.6)',
+            lineHeight: 1.3,
+          }}
+        >
+          {question}
+        </span>
       </div>
 
       {/* 4-Option Trắc Nghiệm Grid */}
@@ -100,7 +81,7 @@ export const OptionsGrid: React.FC<OptionsGridProps> = ({
         style={{
           display: 'grid',
           gridTemplateColumns: '1fr 1fr',
-          gap: 14,
+          gap: 16,
         }}
       >
         {options.map((opt, index) => {
@@ -137,8 +118,8 @@ export const OptionsGrid: React.FC<OptionsGridProps> = ({
             : optOpacity;
 
           // Background styles depending on state
-          let backgroundColor = 'rgba(23, 28, 45, 0.78)';
-          let borderColor = 'rgba(255, 255, 255, 0.1)';
+          let backgroundColor = 'rgba(23, 28, 45, 0.8)';
+          let borderColor = 'rgba(255, 255, 255, 0.12)';
           let boxShadow = '0 8px 24px rgba(0, 0, 0, 0.4)';
 
           if (isRevealed) {
@@ -162,10 +143,10 @@ export const OptionsGrid: React.FC<OptionsGridProps> = ({
                 backgroundColor,
                 border: `2px solid ${borderColor}`,
                 borderRadius: 18,
-                padding: '16px 18px',
+                padding: '18px 20px',
                 display: 'flex',
                 alignItems: 'center',
-                gap: 14,
+                gap: 16,
                 boxShadow,
                 backdropFilter: 'blur(12px)',
                 WebkitBackdropFilter: 'blur(12px)',
@@ -174,13 +155,13 @@ export const OptionsGrid: React.FC<OptionsGridProps> = ({
               {/* Option Key Badge [A], [B], [C], [D] */}
               <div
                 style={{
-                  width: 44,
-                  height: 44,
+                  width: 48,
+                  height: 48,
                   borderRadius: 12,
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  fontSize: 23,
+                  fontSize: 25,
                   fontWeight: 900,
                   backgroundColor:
                     isRevealed && isCorrect
@@ -192,7 +173,7 @@ export const OptionsGrid: React.FC<OptionsGridProps> = ({
                       : '#cbd5e1',
                   boxShadow:
                     isRevealed && isCorrect
-                      ? '0 0 15px #10b981'
+                      ? '0 0 16px #10b981'
                       : 'none',
                   flexShrink: 0,
                 }}
@@ -203,52 +184,32 @@ export const OptionsGrid: React.FC<OptionsGridProps> = ({
               {/* Option Text Content */}
               <div
                 style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: 2,
+                  fontSize: 27,
+                  fontWeight: 700,
+                  fontFamily: 'var(--font-mono)',
+                  color: isRevealed && isCorrect ? '#ffffff' : '#f1f5f9',
+                  lineHeight: 1.3,
+                  wordBreak: 'break-word',
                   flex: 1,
                 }}
               >
-                <div
-                  style={{
-                    fontSize: 24,
-                    fontWeight: 700,
-                    fontFamily: 'var(--font-mono)',
-                    color: isRevealed && isCorrect ? '#ffffff' : '#e2e8f0',
-                    lineHeight: 1.25,
-                    wordBreak: 'break-word',
-                  }}
-                >
-                  {opt.text}
-                </div>
-                {opt.textVi && opt.textVi !== opt.text && (
-                  <div
-                    style={{
-                      fontSize: 18,
-                      fontWeight: 600,
-                      color: isRevealed && isCorrect ? '#a7f3d0' : '#94a3b8',
-                      lineHeight: 1.2,
-                    }}
-                  >
-                    ({opt.textVi})
-                  </div>
-                )}
+                {opt.text}
               </div>
 
-              {/* WIN Badge */}
+              {/* CHÍNH XÁC Badge */}
               {isRevealed && isCorrect && (
                 <div
                   style={{
                     backgroundColor: '#10b981',
                     color: '#ffffff',
                     borderRadius: 8,
-                    padding: '4px 8px',
-                    fontSize: 15,
+                    padding: '5px 10px',
+                    fontSize: 16,
                     fontWeight: 900,
-                    letterSpacing: '0.05em',
+                    letterSpacing: '0.04em',
                   }}
                 >
-                  WIN
+                  ĐÚNG
                 </div>
               )}
             </div>
