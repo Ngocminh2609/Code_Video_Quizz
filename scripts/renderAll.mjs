@@ -128,6 +128,7 @@ for (let i = 0; i < quizzesToProcess.length; i++) {
   }
 
   const videoPath = path.join(quizDir, 'video_hoan_chinh.mp4');
+  const questionImgPath = path.join(quizDir, 'anh_cau_hoi.png');
   const countdownImgPath = path.join(quizDir, 'anh_dem_nguoc.png');
   const revealImgPath = path.join(quizDir, 'anh_cong_bo_dap_an.png');
   const metadataPath = path.join(quizDir, 'thong_tin_cau_do.json');
@@ -150,13 +151,19 @@ for (let i = 0; i < quizzesToProcess.length; i++) {
       execSync(cmdVideo, { cwd: projectRoot, stdio: 'inherit' });
     }
 
-    // 2. Render ảnh đếm ngược (frame 100)
+    // 2. Render các ảnh chụp tĩnh (Still Images)
     if (!isVideoOnly) {
+      // 2a. Ảnh câu hỏi thuần túy (Không đếm ngược & không công bố đáp án)
+      console.log(`   📸 Đang render ảnh câu hỏi: anh_cau_hoi.png (không đếm ngược & không đáp án)...`);
+      const cmdQuestion = `npx remotion still src/index.ts "question-${quiz.id}" "${toSafePath(questionImgPath)}" --image-format=png --frame=90`;
+      execSync(cmdQuestion, { cwd: projectRoot, stdio: 'inherit' });
+
+      // 2b. Ảnh đếm ngược (đang làm bài, frame 100)
       console.log(`   📸 Đang render ảnh đếm ngược: anh_dem_nguoc.png (frame 100)...`);
       const cmdCountdown = `npx remotion still src/index.ts "${quiz.id}" "${toSafePath(countdownImgPath)}" --image-format=png --frame=100`;
       execSync(cmdCountdown, { cwd: projectRoot, stdio: 'inherit' });
 
-      // 3. Render ảnh công bố đáp án & thẻ giải thích (frame 240)
+      // 2c. Ảnh công bố đáp án & thẻ giải thích (frame 240)
       console.log(`   📸 Đang render ảnh công bố đáp án: anh_cong_bo_dap_an.png (frame 240)...`);
       const cmdReveal = `npx remotion still src/index.ts "${quiz.id}" "${toSafePath(revealImgPath)}" --image-format=png --frame=240`;
       execSync(cmdReveal, { cwd: projectRoot, stdio: 'inherit' });
@@ -182,6 +189,12 @@ for (let i = 0; i < quizzesToProcess.length; i++) {
           soundEffects: {
             countdown: countdownSound,
             celebration: successSound,
+          },
+          files: {
+            video: isStillOnly ? null : 'video_hoan_chinh.mp4',
+            questionImage: 'anh_cau_hoi.png',
+            countdownImage: 'anh_dem_nguoc.png',
+            revealImage: 'anh_cong_bo_dap_an.png',
           },
           renderedAt: new Date().toISOString(),
           resolution: '1080x1920',

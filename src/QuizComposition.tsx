@@ -11,7 +11,11 @@ import { OptionsGrid } from './components/OptionsGrid';
 import { ExplanationCard } from './components/ExplanationCard';
 import { Confetti } from './components/Confetti';
 
-export const QuizComposition: React.FC<QuizCompositionProps> = ({ quiz }) => {
+export const QuizComposition: React.FC<QuizCompositionProps> = ({
+  quiz,
+  hideCountdown = false,
+  hideAnswer = false,
+}) => {
   const languageConfig = LANGUAGE_CONFIGS[quiz.language] || LANGUAGE_CONFIGS.python;
 
   // Resolve randomized / assigned sound effects for this specific quiz
@@ -43,7 +47,7 @@ export const QuizComposition: React.FC<QuizCompositionProps> = ({ quiz }) => {
       }}
     >
       {/* 1. Countdown Tick-Tock (Frame 30 to 210 = 180 frames / 6 seconds) */}
-      {countdownSound && (
+      {!hideCountdown && countdownSound && (
         <Sequence from={30} durationInFrames={180} name={`Countdown Audio (${countdownSound.name})`}>
           <Audio
             src={staticFile(countdownSound.file)}
@@ -53,7 +57,7 @@ export const QuizComposition: React.FC<QuizCompositionProps> = ({ quiz }) => {
       )}
 
       {/* 2. Answer Reveal & Celebration Chime (Frame 210 to 300 = 90 frames / 3 seconds) */}
-      {successSound && (
+      {!hideAnswer && successSound && (
         <Sequence from={210} durationInFrames={90} name={`Celebration Audio (${successSound.name})`}>
           <Audio
             src={staticFile(successSound.file)}
@@ -65,7 +69,7 @@ export const QuizComposition: React.FC<QuizCompositionProps> = ({ quiz }) => {
       <Background languageConfig={languageConfig} />
 
       {/* Confetti Explosion Triggered on Answer Reveal (Frame 210+) */}
-      <Confetti triggerFrame={210} />
+      {!hideAnswer && <Confetti triggerFrame={210} />}
 
       {/* Content Container */}
       <div
@@ -90,23 +94,76 @@ export const QuizComposition: React.FC<QuizCompositionProps> = ({ quiz }) => {
         <CodeCard code={quiz.code} languageConfig={languageConfig} />
 
         {/* 3. CountdownBar: Dynamic Linear Countdown Bar with Numeric Timer */}
-        <CountdownBar startFrame={30} endFrame={210} />
+        {!hideCountdown && <CountdownBar startFrame={30} endFrame={210} />}
 
         {/* 4. OptionsGrid: 4-Option Trắc Nghiệm Grid with Highlight State */}
         <OptionsGrid
           question={question}
           options={quiz.options}
           correctAnswer={quiz.correctAnswer}
-          revealFrame={210}
+          revealFrame={hideAnswer ? 999999 : 210}
         />
 
-        {/* 5. ExplanationCard: Bottom Breakdown of Gotcha & Call to Action */}
-        <div style={{ minHeight: 250 }}>
-          <ExplanationCard
-            correctAnswer={quiz.correctAnswer}
-            explanation={explanation}
-            triggerFrame={210}
-          />
+        {/* 5. Bottom Card: Either Explanation breakdown or Social Challenge CTA */}
+        <div style={{ minHeight: 250, display: 'flex', alignItems: 'center' }}>
+          {!hideAnswer ? (
+            <ExplanationCard
+              correctAnswer={quiz.correctAnswer}
+              explanation={explanation}
+              triggerFrame={210}
+            />
+          ) : (
+            <div
+              style={{
+                width: '92%',
+                margin: '0 auto',
+                padding: '24px 28px',
+                borderRadius: 22,
+                backgroundColor: 'rgba(15, 23, 42, 0.82)',
+                border: '1.5px solid rgba(56, 189, 248, 0.4)',
+                boxShadow:
+                  '0 16px 36px rgba(0, 0, 0, 0.55), 0 0 25px rgba(56, 189, 248, 0.25)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                backdropFilter: 'blur(16px)',
+                WebkitBackdropFilter: 'blur(16px)',
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: 18 }}>
+                <span style={{ fontSize: 38 }}>💬</span>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                  <span
+                    style={{
+                      fontSize: 27,
+                      fontWeight: 900,
+                      color: '#f8fafc',
+                      letterSpacing: '-0.01em',
+                    }}
+                  >
+                    ĐÁP ÁN CỦA BẠN LÀ GÌ?
+                  </span>
+                  <span style={{ fontSize: 21, fontWeight: 700, color: '#38bdf8' }}>
+                    Hãy để lại câu trả lời [A, B, C hay D] dưới phần bình luận! 👇
+                  </span>
+                </div>
+              </div>
+              <div
+                style={{
+                  backgroundColor: '#0284c7',
+                  color: '#ffffff',
+                  fontWeight: 800,
+                  fontSize: 20,
+                  padding: '10px 22px',
+                  borderRadius: 14,
+                  boxShadow: '0 0 16px rgba(2, 132, 199, 0.6)',
+                  flexShrink: 0,
+                }}
+              >
+                THỬ THÁCH
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

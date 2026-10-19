@@ -89,9 +89,15 @@ Iterates through all quizzes in `src/data/quizzes.json` and renders each to `out
 ```bash
 npm run render:still
 ```
-Exports a high-resolution 1080x1920 PNG still of frame 240 (answer reveal phase).
+Exports a high-resolution 1080x1920 PNG still of frame 240 (answer reveal & explanation phase).
 
-### 5. Run Type Checks & Lint
+### 5. Render a Clean Question-Only Poster (No Countdown, No Answer)
+```bash
+npm run render:question
+```
+Exports a clean, high-engagement 1080x1920 PNG question poster without countdown and without answer reveal (ideal for social media challenge posts).
+
+### 6. Run Type Checks & Lint
 ```bash
 npm run lint
 ```

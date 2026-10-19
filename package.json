@@ -32,6 +32,7 @@
     "render:all": "node scripts/renderAll.mjs",
     "render:single": "remotion render src/index.ts MainQuiz out/quiz.mp4",
     "render:still": "remotion still src/index.ts MainQuiz out/preview.png --frame=240",
+    "render:question": "remotion still src/index.ts MainQuestionStill out/question_preview.png --frame=90",
     "build": "remotion bundle",
     "generate:audio": "node scripts/generateAudio.mjs",
     "upgrade": "remotion upgrade",

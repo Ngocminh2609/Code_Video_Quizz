@@ -31,6 +31,8 @@ export const quizItemSchema = z.object({
 
 export const quizVideoSchema = z.object({
   quiz: quizItemSchema,
+  hideCountdown: z.boolean().optional(),
+  hideAnswer: z.boolean().optional(),
 });
 
 export type QuizOption = z.infer<typeof quizOptionSchema>;
@@ -39,4 +41,6 @@ export type QuizVideoSchema = typeof quizVideoSchema;
 
 export interface QuizCompositionProps extends Record<string, unknown> {
   quiz: QuizItem;
+  hideCountdown?: boolean;
+  hideAnswer?: boolean;
 }

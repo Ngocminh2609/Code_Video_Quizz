@@ -25,6 +25,22 @@ export const RemotionRoot: React.FC = () => {
         }}
       />
 
+      {/* Primary Question Still: Clean Poster Preview in Remotion Studio */}
+      <Composition
+        id="MainQuestionStill"
+        component={QuizComposition}
+        durationInFrames={300}
+        fps={30}
+        width={1080}
+        height={1920}
+        schema={quizVideoSchema}
+        defaultProps={{
+          quiz: defaultQuiz,
+          hideCountdown: true,
+          hideAnswer: true,
+        }}
+      />
+
       {/* Folder Registry: Configured for Batch Rendering Every Quiz from quizzes.json */}
       <Folder name="All-Quizzes">
         {quizzes.map((quiz) => (
@@ -39,6 +55,27 @@ export const RemotionRoot: React.FC = () => {
             schema={quizVideoSchema}
             defaultProps={{
               quiz,
+            }}
+          />
+        ))}
+      </Folder>
+
+      {/* Folder Registry: Clean Question Stills (No countdown bar & no correct answer) */}
+      <Folder name="Question-Stills">
+        {quizzes.map((quiz) => (
+          <Composition
+            key={`question-${quiz.id}`}
+            id={`question-${quiz.id}`}
+            component={QuizComposition}
+            durationInFrames={300}
+            fps={30}
+            width={1080}
+            height={1920}
+            schema={quizVideoSchema}
+            defaultProps={{
+              quiz,
+              hideCountdown: true,
+              hideAnswer: true,
             }}
           />
         ))}

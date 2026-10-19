@@ -22,11 +22,13 @@ Dự án hoàn chỉnh, chuẩn production được xây dựng bằng **Remotio
    out/
    ├── 01_Python_Gia_Tri_Mac_Dinh_List/
    │   ├── video_hoan_chinh.mp4      # Video MP4 10s (1080x1920, 30 FPS)
+   │   ├── anh_cau_hoi.png           # Ảnh câu hỏi thuần túy (KHÔNG đếm ngược, KHÔNG đáp án)
    │   ├── anh_dem_nguoc.png         # Ảnh frame 100 (thời điểm đếm ngược suy nghĩ)
    │   ├── anh_cong_bo_dap_an.png    # Ảnh frame 240 (thời điểm công bố đáp án + pháo hoa)
    │   └── thong_tin_cau_do.json     # Metadata chi tiết song ngữ của câu đố
    ├── 02_JavaScript_Ep_Kieu_Cong_Mang/
    │   ├── video_hoan_chinh.mp4
+   │   ├── anh_cau_hoi.png
    │   ├── anh_dem_nguoc.png
    │   ├── anh_cong_bo_dap_an.png
    │   └── thong_tin_cau_do.json
