@@ -1,6 +1,8 @@
 import React from 'react';
+import { Audio, staticFile, Sequence } from 'remotion';
 import { QuizCompositionProps } from './types';
 import { LANGUAGE_CONFIGS } from './utils/languageTheme';
+import { getSoundForQuiz } from './utils/soundManager';
 import { Background } from './components/Background';
 import { HeaderHook } from './components/HeaderHook';
 import { CodeCard } from './components/CodeCard';
@@ -11,6 +13,13 @@ import { Confetti } from './components/Confetti';
 
 export const QuizComposition: React.FC<QuizCompositionProps> = ({ quiz }) => {
   const languageConfig = LANGUAGE_CONFIGS[quiz.language] || LANGUAGE_CONFIGS.python;
+
+  // Resolve randomized / assigned sound effects for this specific quiz
+  const { countdownSound, successSound } = getSoundForQuiz(
+    quiz.id,
+    quiz.audioCountdown,
+    quiz.audioSuccess
+  );
 
   // Use pure Vietnamese text throughout the video
   const hookTitle = quiz.hookTitleVi || quiz.hookTitle;
@@ -33,6 +42,25 @@ export const QuizComposition: React.FC<QuizCompositionProps> = ({ quiz }) => {
         paddingBottom: 45,
       }}
     >
+      {/* 1. Countdown Tick-Tock (Frame 30 to 210 = 180 frames / 6 seconds) */}
+      {countdownSound && (
+        <Sequence from={30} durationInFrames={180} name={`Countdown Audio (${countdownSound.name})`}>
+          <Audio
+            src={staticFile(countdownSound.file)}
+            volume={countdownSound.volume}
+          />
+        </Sequence>
+      )}
+
+      {/* 2. Answer Reveal & Celebration Chime (Frame 210 to 300 = 90 frames / 3 seconds) */}
+      {successSound && (
+        <Sequence from={210} durationInFrames={90} name={`Celebration Audio (${successSound.name})`}>
+          <Audio
+            src={staticFile(successSound.file)}
+            volume={successSound.volume}
+          />
+        </Sequence>
+      )}
       {/* Dynamic Animated Cyberpunk Background with Audio Spectrum */}
       <Background languageConfig={languageConfig} />
 

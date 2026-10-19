@@ -32,30 +32,30 @@ A production-ready Remotion project built with React, TypeScript, TailwindCSS, a
 
 ```
 Code_Video_Quizz/
-├── public/                 # Static assets
+├── public/                 # Static assets & generated audio (countdown, success)
 ├── scripts/
+│   ├── generateAudio.mjs   # Synthesizes custom WAV sound effects
 │   └── renderAll.mjs       # Automated batch renderer for all quizzes
 ├── src/
 │   ├── components/
 │   │   ├── Background.tsx       # Futuristic animated dark grid & audio visualizer
-│   │   ├── CodeWindow.tsx       # Mac-style terminal with Prism syntax highlighting
+│   │   ├── CodeCard.tsx         # Mac-style terminal with Prism syntax highlighting
 │   │   ├── Confetti.tsx         # Frame-based physics confetti celebration
-│   │   ├── CountdownTimer.tsx   # SVG radial countdown ring & urgency animations
+│   │   ├── CountdownBar.tsx     # Dynamic linear countdown progress bar with timer
 │   │   ├── ExplanationCard.tsx  # Bottom gotcha explanation card & CTA
 │   │   ├── HeaderHook.tsx       # High-impact hook title & language badges
-│   │   ├── QuestionBox.tsx      # Staggered options grid & correct answer highlight
-│   │   └── QuizVideo.tsx        # Master composition layout
+│   │   └── OptionsGrid.tsx      # Staggered options grid & correct answer highlight
 │   ├── data/
 │   │   └── quizzes.json         # Quiz database (Python, JS, C++, Java)
-│   ├── types/
-│   │   └── quiz.ts              # TypeScript interfaces & Zod schemas
 │   ├── utils/
 │   │   ├── languageTheme.ts     # Brand colors, icons, filenames per language
-│   │   └── prismSetup.ts        # Prism syntax grammar registration
-│   ├── Composition.tsx          # Composition entry
+│   │   ├── prismSetup.ts        # Prism syntax grammar registration
+│   │   └── soundManager.ts      # Audio mapping & SFX assignment per quiz
 │   ├── index.css                # Typography (Outfit, JetBrains Mono) & styling
 │   ├── index.ts                 # Remotion root register
-│   └── Root.tsx                 # Compositions & All-Quizzes folder registry
+│   ├── QuizComposition.tsx     # Master video composition & audio sequencing
+│   ├── Root.tsx                 # Compositions & All-Quizzes folder registry
+│   └── types.ts                 # TypeScript interfaces & Zod schemas
 ├── package.json
 ├── remotion.config.ts
 └── tsconfig.json

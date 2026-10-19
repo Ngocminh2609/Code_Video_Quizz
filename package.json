@@ -33,6 +33,7 @@
     "render:single": "remotion render src/index.ts MainQuiz out/quiz.mp4",
     "render:still": "remotion still src/index.ts MainQuiz out/preview.png --frame=240",
     "build": "remotion bundle",
+    "generate:audio": "node scripts/generateAudio.mjs",
     "upgrade": "remotion upgrade",
     "lint": "eslint src && tsc"
   },

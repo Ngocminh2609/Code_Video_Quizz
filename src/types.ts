@@ -25,6 +25,8 @@ export const quizItemSchema = z.object({
   difficultyVi: z.string().optional(),
   category: z.string().optional(),
   categoryVi: z.string().optional(),
+  audioCountdown: z.string().optional(),
+  audioSuccess: z.string().optional(),
 });
 
 export const quizVideoSchema = z.object({
