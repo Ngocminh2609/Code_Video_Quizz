@@ -86,6 +86,94 @@ function getSoundForQuiz(quizId, overrideCountdown, overrideSuccess) {
 // Chuẩn hóa đường dẫn cho lệnh shell trên cả Windows, Linux và macOS
 const toSafePath = (filePath) => filePath.replace(/\\/g, '/');
 
+// Tạo nội dung mô tả & hashtag tối ưu cho mạng xã hội (Facebook, TikTok)
+function generateSocialPostContent(quiz) {
+  const hookTitle = quiz.hookTitleVi || quiz.hookTitle;
+  const question = quiz.questionVi || quiz.question;
+  const difficulty = quiz.difficultyVi || quiz.difficulty || 'Cơ Bản';
+  const category = quiz.categoryVi || quiz.category || 'Lập Trình';
+
+  const langNames = {
+    python: 'Python',
+    javascript: 'JavaScript',
+    cpp: 'C++',
+    java: 'Java',
+  };
+  const langName = langNames[quiz.language] || quiz.language.toUpperCase();
+
+  const langTagsFb = {
+    python: ['#Python', '#LapTrinhPython', '#PythonProgramming', '#HocPython'],
+    javascript: ['#JavaScript', '#LapTrinhJavaScript', '#JS', '#WebDeveloper'],
+    cpp: ['#CPP', '#CPlusPlus', '#LapTrinhCPP', '#LapTrinhC'],
+    java: ['#Java', '#LapTrinhJava', '#JavaDeveloper', '#Backend'],
+  };
+
+  const fbTags = [
+    '#LapTrinh',
+    '#HocLapTrinh',
+    ...(langTagsFb[quiz.language] || [`#${langName}`]),
+    '#CodeQuiz',
+    '#LapTrinhVien',
+    '#ITVietNam',
+    '#CodingChallenge',
+    '#TechTips',
+  ].join(' ');
+
+  const tiktokTags = [
+    '#hoclaptrinh',
+    '#laptrinh',
+    ...(langTagsFb[quiz.language] ? langTagsFb[quiz.language].map((t) => t.toLowerCase()) : [`#${quiz.language}`]),
+    '#codequiz',
+    '#learnontiktok',
+    '#itvietnam',
+    '#coding',
+    '#developer',
+    '#xuhuong',
+    '#fyp',
+  ].join(' ');
+
+  const optionsList = quiz.options
+    .map((opt) => `  [${opt.key}] ${opt.text}${opt.textVi && opt.textVi !== opt.text ? ` (${opt.textVi})` : ''}`)
+    .join('\n');
+
+  return `================================================================================
+📌 NỘI DUNG ĐĂNG BÀI - ${hookTitle}
+📂 Ngôn ngữ: ${langName} | Độ khó: ${difficulty} | Chủ đề: ${category}
+================================================================================
+
+--------------------------------------------------------------------------------
+📘 1. NỀN TẢNG: FACEBOOK (Dành cho Facebook Reels / Post Video / Post Ảnh)
+--------------------------------------------------------------------------------
+🔥 ${hookTitle} 🔥
+
+🧠 THỬ THÁCH LẬP TRÌNH ${langName.toUpperCase()}:
+❓ Câu hỏi: ${question}
+
+💻 Đoạn mã:
+\`\`\`${quiz.language}
+${quiz.code}
+\`\`\`
+
+👇 Lựa chọn của bạn là gì?
+${optionsList}
+
+💬 Hãy bình luận ngay đáp án của bạn [A, B, C hay D] bên dưới bình luận trước khi xem kết quả nhé!
+💡 Đáp án và giải thích chi tiết có ở cuối video! 🎯
+
+👉 Nhấn Follow kênh để nhận thêm nhiều câu đố và bí kíp lập trình mỗi ngày! 🚀✨
+
+${fbTags}
+
+--------------------------------------------------------------------------------
+🎵 2. NỀN TẢNG: TIKTOK (Ngắn gọn, cuốn hút, tối ưu thuật toán tìm kiếm SEO)
+--------------------------------------------------------------------------------
+${hookTitle} 😱 Bạn có đoán được kết quả của đoạn code ${langName} này không? Comment ngay đáp án của bạn trước khi hết giờ nhé! 👇✨
+
+${tiktokTags}
+================================================================================
+`;
+}
+
 // 3. Xử lý tham số dòng lệnh CLI linh hoạt
 const args = process.argv.slice(2);
 const isFirstOnly = args.includes('--first') || args.includes('-1');
@@ -131,6 +219,7 @@ for (let i = 0; i < quizzesToProcess.length; i++) {
   const questionImgPath = path.join(quizDir, 'anh_cau_hoi.png');
   const countdownImgPath = path.join(quizDir, 'anh_dem_nguoc.png');
   const revealImgPath = path.join(quizDir, 'anh_cong_bo_dap_an.png');
+  const postContentPath = path.join(quizDir, 'mo_ta_dang_bai.txt');
   const metadataPath = path.join(quizDir, 'thong_tin_cau_do.json');
 
   console.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
@@ -169,6 +258,10 @@ for (let i = 0; i < quizzesToProcess.length; i++) {
       execSync(cmdReveal, { cwd: projectRoot, stdio: 'inherit' });
     }
 
+    // 3. Tạo file mô tả & hashtag đăng bài Facebook / TikTok
+    fs.writeFileSync(postContentPath, generateSocialPostContent(quiz), 'utf-8');
+    console.log(`   📝 Đã lưu nội dung đăng bài: mo_ta_dang_bai.txt (Facebook & TikTok)`);
+
     // 4. Lưu metadata thông tin câu đố JSON
     fs.writeFileSync(
       metadataPath,
@@ -195,6 +288,7 @@ for (let i = 0; i < quizzesToProcess.length; i++) {
             questionImage: 'anh_cau_hoi.png',
             countdownImage: 'anh_dem_nguoc.png',
             revealImage: 'anh_cong_bo_dap_an.png',
+            postCaptions: 'mo_ta_dang_bai.txt',
           },
           renderedAt: new Date().toISOString(),
           resolution: '1080x1920',

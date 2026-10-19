@@ -25,13 +25,15 @@ Dự án hoàn chỉnh, chuẩn production được xây dựng bằng **Remotio
    │   ├── anh_cau_hoi.png           # Ảnh câu hỏi thuần túy (KHÔNG đếm ngược, KHÔNG đáp án)
    │   ├── anh_dem_nguoc.png         # Ảnh frame 100 (thời điểm đếm ngược suy nghĩ)
    │   ├── anh_cong_bo_dap_an.png    # Ảnh frame 240 (thời điểm công bố đáp án + pháo hoa)
-   │   └── thong_tin_cau_do.json     # Metadata chi tiết song ngữ của câu đố
+   │   ├── thong_tin_cau_do.json     # Metadata chi tiết song ngữ của câu đố
+   │   └── mo_ta_dang_bai.txt        # Caption kèm icon & hashtag tối ưu cho Facebook & TikTok
    ├── 02_JavaScript_Ep_Kieu_Cong_Mang/
    │   ├── video_hoan_chinh.mp4
    │   ├── anh_cau_hoi.png
    │   ├── anh_dem_nguoc.png
    │   ├── anh_cong_bo_dap_an.png
-   │   └── thong_tin_cau_do.json
+   │   ├── thong_tin_cau_do.json
+   │   └── mo_ta_dang_bai.txt
    ├── 03_CPP_Tham_Chieu_Khong_The_Gan_Lai/
    ├── 04_Java_Bo_Nho_Dem_Integer_Cache/
    └── 05_Python_Bien_Doi_List_Trong_Tuple/
