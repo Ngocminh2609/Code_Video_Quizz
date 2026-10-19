@@ -61,6 +61,14 @@ const SUCCESS_SOUNDS = [
   { id: 'arcade-levelup', name: 'Game 8-Bit Level Up', file: 'audio/success/arcade-levelup.wav', volume: 0.7 },
 ];
 
+const WARNING_SOUNDS = [
+  { id: 'warning-siren', name: 'Còi Hú Khẩn Cấp Siren', file: 'audio/warning/warning-siren.wav', volume: 0.85 },
+  { id: 'warning-buzzer', name: 'Còi Buzzer Nguy Hiểm Công Nghiệp', file: 'audio/warning/warning-buzzer.wav', volume: 0.8 },
+  { id: 'warning-nuclear', name: 'Còi Báo Động Hạt Nhân Nguy Cấp', file: 'audio/warning/warning-nuclear.wav', volume: 0.85 },
+  { id: 'warning-glitch', name: 'Cảnh Báo Lỗi Glitch Cyberpunk', file: 'audio/warning/warning-glitch.wav', volume: 0.75 },
+  { id: 'warning-radar', name: 'Radar Cảnh Báo Nguy Hiểm Cao', file: 'audio/warning/warning-radar.wav', volume: 0.8 },
+];
+
 function hashString(str) {
   let hash = 0;
   for (let i = 0; i < str.length; i++) {
@@ -70,17 +78,28 @@ function hashString(str) {
   return Math.abs(hash);
 }
 
-function getSoundForQuiz(quizId, overrideCountdown, overrideSuccess) {
+function getSoundForQuiz(quizId, overrideCountdown, overrideSuccess, overrideWarning) {
   const hash = hashString(quizId || 'default');
   const cIdx = hash % COUNTDOWN_SOUNDS.length;
   const sIdx = (hash + 1) % SUCCESS_SOUNDS.length;
+  const wIdx = (hash + 2) % WARNING_SOUNDS.length;
+
   const countdownSound = overrideCountdown
     ? COUNTDOWN_SOUNDS.find((s) => s.id === overrideCountdown || s.file === overrideCountdown) || COUNTDOWN_SOUNDS[cIdx]
     : COUNTDOWN_SOUNDS[cIdx];
   const successSound = overrideSuccess
     ? SUCCESS_SOUNDS.find((s) => s.id === overrideSuccess || s.file === overrideSuccess) || SUCCESS_SOUNDS[sIdx]
     : SUCCESS_SOUNDS[sIdx];
-  return { countdownSound, successSound };
+  const warningSound = overrideWarning
+    ? WARNING_SOUNDS.find((s) => s.id === overrideWarning || s.file === overrideWarning) || {
+        id: 'custom-warning',
+        name: 'Âm Thanh Cảnh Báo Tùy Biến',
+        file: overrideWarning,
+        volume: 0.8,
+      }
+    : WARNING_SOUNDS[wIdx];
+
+  return { countdownSound, successSound, warningSound };
 }
 
 // Chuẩn hóa đường dẫn cho lệnh shell trên cả Windows, Linux và macOS
@@ -179,6 +198,8 @@ const args = process.argv.slice(2);
 const isFirstOnly = args.includes('--first') || args.includes('-1');
 const isStillOnly = args.includes('--still-only') || args.includes('--stills');
 const isVideoOnly = args.includes('--video-only');
+const isForceInDepth = args.includes('--indepth') || args.includes('--in-depth') || args.includes('--mode=indepth') || args.includes('--mode=in-depth');
+const isForceBait = args.includes('--bait') || args.includes('--mode=bait') || args.includes('--mode=engagement-bait');
 const targetId = args.find((arg) => !arg.startsWith('-')) || null;
 
 if (targetId) {
@@ -197,6 +218,13 @@ const quizzesToProcess = targetId
     : quizzes;
 
 console.log(`🎬 Chuẩn bị xử lý ${quizzesToProcess.length} bộ video & hình ảnh...`);
+if (isForceInDepth) {
+  console.log(`   🎯 Chế độ ép buộc: TOÀN BỘ là Phương án B: in-depth (16s - Giải thích sâu & Lưu bài)`);
+} else if (isForceBait) {
+  console.log(`   🎯 Chế độ ép buộc: TOÀN BỘ là Phương án A: engagement-bait (9s - Bẫy comment cực đại)`);
+} else {
+  console.log(`   🎯 Chế độ: LINH HOẠT & RANDOM XEN KẼ 50/50 GIỮA 2 PHƯƠNG ÁN (A: Bẫy Comment 9s & B: Giải Thích Sâu 16s)`);
+}
 if (isStillOnly) console.log('   ℹ️ Chế độ: Chỉ render ảnh chụp preview (Bỏ qua video MP4).');
 if (isVideoOnly) console.log('   ℹ️ Chế độ: Chỉ render video MP4 (Bỏ qua ảnh chụp preview).');
 console.log();
@@ -215,6 +243,18 @@ for (let i = 0; i < quizzesToProcess.length; i++) {
     fs.mkdirSync(quizDir, { recursive: true });
   }
 
+  // Xác định chế độ hiển thị linh hoạt cho từng quiz
+  const isQuizInDepth = isForceInDepth
+    ? true
+    : isForceBait
+      ? false
+      : quiz.displayMode
+        ? quiz.displayMode === 'in-depth'
+        : i % 2 === 1;
+
+  const currentDisplayMode = isQuizInDepth ? 'in-depth' : 'engagement-bait';
+  const compositionId = isQuizInDepth ? `indepth-${quiz.id}` : quiz.id;
+
   const videoPath = path.join(quizDir, 'video_hoan_chinh.mp4');
   const questionImgPath = path.join(quizDir, 'anh_cau_hoi.png');
   const countdownImgPath = path.join(quizDir, 'anh_dem_nguoc.png');
@@ -227,16 +267,18 @@ for (let i = 0; i < quizzesToProcess.length; i++) {
   console.log(`   Tiêu đề EN: ${quiz.hookTitle}`);
   console.log(`   Tiêu đề VI: ${quiz.hookTitleVi || ''}`);
   console.log(`   Ngôn ngữ:   ${quiz.language.toUpperCase()}`);
+  console.log(`   🎯 Phương án: ${isQuizInDepth ? 'B (in-depth: 16s - Show đáp án đúng + Giải thích sâu)' : 'A (engagement-bait: 9s - Bẫy comment không show đáp án)'}`);
 
-  const { countdownSound, successSound } = getSoundForQuiz(quiz.id, quiz.audioCountdown, quiz.audioSuccess);
+  const { countdownSound, successSound, warningSound } = getSoundForQuiz(quiz.id, quiz.audioCountdown, quiz.audioSuccess, quiz.audioWarning);
+  console.log(`   🚨 Cảnh báo:   ${warningSound.name} (${warningSound.file}) [vol: ${warningSound.volume}]`);
   console.log(`   ⏱️ Đếm ngược:  ${countdownSound.name} (${countdownSound.file}) [vol: ${countdownSound.volume}]`);
   console.log(`   🎉 Chúc mừng:   ${successSound.name} (${successSound.file}) [vol: ${successSound.volume}]`);
 
   try {
-    // 1. Render Video MP4 (10s, 300 frames, 1080x1920, Lossless PNG frame buffer, CRF 14)
+    // 1. Render Video MP4 (Lossless PNG frame buffer, CRF 14)
     if (!isStillOnly) {
-      console.log(`   🎥 Đang render video độ nét cao: video_hoan_chinh.mp4...`);
-      const cmdVideo = `npx remotion render src/index.ts "${quiz.id}" "${toSafePath(videoPath)}" --image-format=png --crf=14 --pixel-format=yuv420p --concurrency=4`;
+      console.log(`   🎥 Đang render video độ nét cao: video_hoan_chinh.mp4 (${currentDisplayMode})...`);
+      const cmdVideo = `npx remotion render src/index.ts "${compositionId}" "${toSafePath(videoPath)}" --image-format=jpeg --pixel-format=yuv420p --concurrency=4`;
       execSync(cmdVideo, { cwd: projectRoot, stdio: 'inherit' });
     }
 
@@ -249,12 +291,12 @@ for (let i = 0; i < quizzesToProcess.length; i++) {
 
       // 2b. Ảnh đếm ngược (đang làm bài, frame 100)
       console.log(`   📸 Đang render ảnh đếm ngược: anh_dem_nguoc.png (frame 100)...`);
-      const cmdCountdown = `npx remotion still src/index.ts "${quiz.id}" "${toSafePath(countdownImgPath)}" --image-format=png --frame=100`;
+      const cmdCountdown = `npx remotion still src/index.ts "${compositionId}" "${toSafePath(countdownImgPath)}" --image-format=png --frame=100`;
       execSync(cmdCountdown, { cwd: projectRoot, stdio: 'inherit' });
 
-      // 2c. Ảnh công bố đáp án & thẻ giải thích (frame 240)
-      console.log(`   📸 Đang render ảnh công bố đáp án: anh_cong_bo_dap_an.png (frame 240)...`);
-      const cmdReveal = `npx remotion still src/index.ts "${quiz.id}" "${toSafePath(revealImgPath)}" --image-format=png --frame=240`;
+      // 2c. Ảnh công bố đáp án / Bẫy tương tác (frame 220)
+      console.log(`   📸 Đang render ảnh Giai đoạn 3 (${currentDisplayMode}): anh_cong_bo_dap_an.png (frame 220)...`);
+      const cmdReveal = `npx remotion still src/index.ts "${compositionId}" "${toSafePath(revealImgPath)}" --image-format=png --frame=220`;
       execSync(cmdReveal, { cwd: projectRoot, stdio: 'inherit' });
     }
 

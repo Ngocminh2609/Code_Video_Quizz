@@ -1,6 +1,6 @@
 import React from 'react';
 import { Audio, staticFile, Sequence } from 'remotion';
-import { QuizCompositionProps } from './types';
+import { QuizCompositionProps, resolveConfusingOptions, resolveWarningHook } from './types';
 import { LANGUAGE_CONFIGS } from './utils/languageTheme';
 import { getSoundForQuiz } from './utils/soundManager';
 import { Background } from './components/Background';
@@ -8,29 +8,49 @@ import { HeaderHook } from './components/HeaderHook';
 import { CodeCard } from './components/CodeCard';
 import { CountdownBar } from './components/CountdownBar';
 import { OptionsGrid } from './components/OptionsGrid';
-import { ExplanationCard } from './components/ExplanationCard';
+import { EngagementBaitCTA } from './components/EngagementBaitCTA';
+import { InDepthExplanationCard } from './components/InDepthExplanationCard';
 import { Confetti } from './components/Confetti';
 
 export const QuizComposition: React.FC<QuizCompositionProps> = ({
   quiz,
+  displayMode = 'engagement-bait',
   hideCountdown = false,
   hideAnswer = false,
+  warningHook,
+  warningText,
 }) => {
   const languageConfig = LANGUAGE_CONFIGS[quiz.language] || LANGUAGE_CONFIGS.python;
 
-  // Resolve randomized / assigned sound effects for this specific quiz
-  const { countdownSound, successSound } = getSoundForQuiz(
+  // Resolve countdown, victory, and random danger warning sounds
+  const { countdownSound, successSound, warningSound } = getSoundForQuiz(
     quiz.id,
     quiz.audioCountdown,
-    quiz.audioSuccess
+    quiz.audioSuccess,
+    quiz.audioWarning
   );
 
-  // Use pure Vietnamese text throughout the video
+  // Pure Vietnamese content & dynamic warning hook
   const hookTitle = quiz.hookTitleVi || quiz.hookTitle;
+  const activeWarningHook =
+    warningHook ||
+    warningText ||
+    resolveWarningHook({
+      warningHook: quiz.warningHook,
+      warningHookVi: quiz.warningHookVi,
+      difficulty: quiz.difficulty,
+      difficultyVi: quiz.difficultyVi,
+    });
+
   const difficulty = quiz.difficultyVi || quiz.difficulty || 'CƠ BẢN';
   const category = quiz.categoryVi || quiz.category;
   const question = quiz.questionVi || quiz.question;
   const explanation = quiz.explanationVi || quiz.explanation;
+  const inDepthExplanation = quiz.inDepthExplanationVi || quiz.inDepthExplanation || explanation;
+  const inDepthPoints = quiz.inDepthPointsVi || quiz.inDepthPoints || [];
+
+  // 2 đáp án gây lú nhất (confusingOptions hoặc baitOptions)
+  const resolvedConfusing = resolveConfusingOptions(quiz);
 
   return (
     <div
@@ -46,9 +66,23 @@ export const QuizComposition: React.FC<QuizCompositionProps> = ({
         paddingBottom: 45,
       }}
     >
-      {/* 1. Countdown Tick-Tock (Frame 30 to 210 = 180 frames / 6 seconds) */}
+      {/* 🔹 (1) ÂM THANH CÒI BÁO ĐỘNG KHẨN CẤP NGẪU NHIÊN (Frame 0 đến 45 = 1.5s đầu) */}
+      {warningSound && (
+        <Audio
+          src={
+            warningSound.file.startsWith('http')
+              ? warningSound.file
+              : staticFile(warningSound.file)
+          }
+          startFrom={0}
+          endAt={45}
+          volume={warningSound.volume}
+        />
+      )}
+
+      {/* 🔹 (2) GIAI ĐOẠN 2: Countdown Tick-Tock (Frame 60 đến 180 = 120 frames / 4 giây) */}
       {!hideCountdown && countdownSound && (
-        <Sequence from={30} durationInFrames={180} name={`Countdown Audio (${countdownSound.name})`}>
+        <Sequence from={60} durationInFrames={120} name={`Countdown Audio (${countdownSound.name})`}>
           <Audio
             src={staticFile(countdownSound.file)}
             volume={countdownSound.volume}
@@ -56,20 +90,21 @@ export const QuizComposition: React.FC<QuizCompositionProps> = ({
         </Sequence>
       )}
 
-      {/* 2. Answer Reveal & Celebration Chime (Frame 210 to 300 = 90 frames / 3 seconds) */}
-      {!hideAnswer && successSound && (
-        <Sequence from={210} durationInFrames={90} name={`Celebration Audio (${successSound.name})`}>
+      {/* 🔹 (3) GIAI ĐOẠN 3: Celebration Audio (Chỉ phát ở mode 'in-depth' khi show đáp án đúng) */}
+      {displayMode === 'in-depth' && !hideAnswer && successSound && (
+        <Sequence from={180} durationInFrames={150} name={`Celebration Audio (${successSound.name})`}>
           <Audio
             src={staticFile(successSound.file)}
             volume={successSound.volume}
           />
         </Sequence>
       )}
+
       {/* Dynamic Animated Cyberpunk Background with Audio Spectrum */}
       <Background languageConfig={languageConfig} />
 
-      {/* Confetti Explosion Triggered on Answer Reveal (Frame 210+) */}
-      {!hideAnswer && <Confetti triggerFrame={210} />}
+      {/* Confetti Explosion (CHỈ nổ ở chế độ 'in-depth' khi hiển thị đáp án đúng tại Frame 180) */}
+      {displayMode === 'in-depth' && !hideAnswer && <Confetti triggerFrame={180} />}
 
       {/* Content Container */}
       <div
@@ -82,87 +117,53 @@ export const QuizComposition: React.FC<QuizCompositionProps> = ({
           justifyContent: 'space-between',
         }}
       >
-        {/* 1. Header Hook: Badge, Pure Vietnamese Hook Title & Category */}
+        {/* 🔹 (1) GIAI ĐOẠN 1: 0s - 2s (Frames 0 - 60) | Hook Cảnh Báo Đỏ
+            Banner rung nảy bằng spring() với nội dung động theo độ khó (Easy, Medium, Hard, Extreme)
+            Từ frame 36 đến 60 thu nhỏ dần neo lên header */}
         <HeaderHook
           hookTitle={hookTitle}
+          warningHookText={activeWarningHook}
           difficulty={difficulty}
           category={category}
           languageConfig={languageConfig}
         />
 
-        {/* 2. CodeCard: macOS Window Header with Syntax Highlighting */}
+        {/* 🔹 Khung Code: Xuất hiện mờ phía sau từ frame 0 để người xem quét trước đề bài,
+            từ frame 36 đến 60 sáng rõ 100% khi banner neo lên header */}
         <CodeCard code={quiz.code} languageConfig={languageConfig} />
 
-        {/* 3. CountdownBar: Dynamic Linear Countdown Bar with Numeric Timer */}
-        {!hideCountdown && <CountdownBar startFrame={30} endFrame={210} />}
+        {/* 🔹 (2) GIAI ĐOẠN 2: 2s - 6s (Frames 60 - 180) | Thanh tiến trình co dần 100% về 0% & Đồng hồ số */}
+        {!hideCountdown && <CountdownBar startFrame={60} endFrame={180} />}
 
-        {/* 4. OptionsGrid: 4-Option Trắc Nghiệm Grid with Highlight State */}
+        {/* 🔹 (3) GIAI ĐOẠN 3: 4 Options Trắc Nghiệm:
+            - 'engagement-bait': làm mờ các phương án hiển nhiên sai, giữ 2 đáp án gây lú (confusingOptions) nhấp nháy thăm dò.
+            - 'in-depth': hiển thị đáp án đúng viền xanh sáng. */}
         <OptionsGrid
           question={question}
           options={quiz.options}
           correctAnswer={quiz.correctAnswer}
-          revealFrame={hideAnswer ? 999999 : 210}
+          baitOptions={resolvedConfusing}
+          displayMode={displayMode}
+          revealFrame={hideAnswer ? 999999 : 180}
         />
 
-        {/* 5. Bottom Card: Either Explanation breakdown or Social Challenge CTA */}
+        {/* 🔹 (3) GIAI ĐOẠN 3: TÁCH LUỒNG RENDER DỰA THEO displayMode (TỪ FRAME 180 TRỞ ĐI) */}
         <div style={{ minHeight: 250, display: 'flex', alignItems: 'center' }}>
-          {!hideAnswer ? (
-            <ExplanationCard
-              correctAnswer={quiz.correctAnswer}
-              explanation={explanation}
-              triggerFrame={210}
+          {displayMode === 'engagement-bait' ? (
+            // LỰA CHỌN A: 'engagement-bait' (Tuyệt đối không show đáp án, CTA tranh luận, loop liền mạch)
+            <EngagementBaitCTA
+              baitOptions={resolvedConfusing}
+              triggerFrame={180}
             />
           ) : (
-            <div
-              style={{
-                width: '92%',
-                margin: '0 auto',
-                padding: '24px 28px',
-                borderRadius: 22,
-                backgroundColor: 'rgba(15, 23, 42, 0.82)',
-                border: '1.5px solid rgba(56, 189, 248, 0.4)',
-                boxShadow:
-                  '0 16px 36px rgba(0, 0, 0, 0.55), 0 0 25px rgba(56, 189, 248, 0.25)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                backdropFilter: 'blur(16px)',
-                WebkitBackdropFilter: 'blur(16px)',
-              }}
-            >
-              <div style={{ display: 'flex', alignItems: 'center', gap: 18 }}>
-                <span style={{ fontSize: 38 }}>💬</span>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-                  <span
-                    style={{
-                      fontSize: 27,
-                      fontWeight: 900,
-                      color: '#f8fafc',
-                      letterSpacing: '-0.01em',
-                    }}
-                  >
-                    ĐÁP ÁN CỦA BẠN LÀ GÌ?
-                  </span>
-                  <span style={{ fontSize: 21, fontWeight: 700, color: '#38bdf8' }}>
-                    Hãy để lại câu trả lời [A, B, C hay D] dưới phần bình luận! 👇
-                  </span>
-                </div>
-              </div>
-              <div
-                style={{
-                  backgroundColor: '#0284c7',
-                  color: '#ffffff',
-                  fontWeight: 800,
-                  fontSize: 20,
-                  padding: '10px 22px',
-                  borderRadius: 14,
-                  boxShadow: '0 0 16px rgba(2, 132, 199, 0.6)',
-                  flexShrink: 0,
-                }}
-              >
-                THỬ THÁCH
-              </div>
-            </div>
+            // LỰA CHỌN B: 'in-depth' (Giải thích chi tiết cơ chế code trong 8-12s, CTA "Lưu lại để ôn tập 📌")
+            <InDepthExplanationCard
+              correctAnswer={quiz.correctAnswer}
+              explanation={explanation}
+              inDepthExplanation={inDepthExplanation}
+              inDepthPoints={inDepthPoints}
+              triggerFrame={180}
+            />
           )}
         </div>
       </div>

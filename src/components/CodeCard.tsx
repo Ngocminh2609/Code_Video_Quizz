@@ -1,6 +1,6 @@
 import React from 'react';
 import { Highlight, themes } from 'prism-react-renderer';
-import { interpolate, spring, useCurrentFrame, useVideoConfig } from 'remotion';
+import { interpolate, useCurrentFrame } from 'remotion';
 import { Prism } from '../utils/prismSetup';
 import { LanguageConfig } from '../utils/languageTheme';
 
@@ -11,22 +11,23 @@ interface CodeCardProps {
 
 export const CodeCard: React.FC<CodeCardProps> = ({ code, languageConfig }) => {
   const frame = useCurrentFrame();
-  const { fps } = useVideoConfig();
 
-  // Smooth pop & slide entrance
-  const entrance = spring({
-    frame: frame - 6,
-    fps,
-    config: {
-      damping: 14,
-      stiffness: 110,
-      mass: 0.9,
-    },
+  // Khung code xuất hiện ngầm từ frame 0 để người xem quét đề bài ngay
+  // Từ 1.2s - 2s (frame 36 - 60): làm sáng 100% khối code
+  const brightness = interpolate(frame, [36, 60], [0.65, 1], {
+    extrapolateLeft: 'clamp',
+    extrapolateRight: 'clamp',
   });
 
-  const scale = interpolate(entrance, [0, 1], [0.92, 1]);
-  const opacity = interpolate(entrance, [0, 1], [0, 1]);
-  const translateY = interpolate(entrance, [0, 1], [40, 0]);
+  const codeOpacity = interpolate(frame, [0, 10, 36, 60], [0.55, 0.65, 0.65, 1], {
+    extrapolateLeft: 'clamp',
+    extrapolateRight: 'clamp',
+  });
+
+  const scale = interpolate(frame, [36, 60], [0.97, 1], {
+    extrapolateLeft: 'clamp',
+    extrapolateRight: 'clamp',
+  });
 
   // Clean code string
   const trimmedCode = code.trim();
@@ -34,11 +35,13 @@ export const CodeCard: React.FC<CodeCardProps> = ({ code, languageConfig }) => {
   return (
     <div
       style={{
-        transform: `translateY(${translateY}px) scale(${scale})`,
-        opacity,
+        transform: `scale(${scale})`,
+        opacity: codeOpacity,
+        filter: `brightness(${brightness})`,
         width: '92%',
         margin: '0 auto',
         zIndex: 10,
+        transition: 'filter 0.2s ease-out',
       }}
     >
       <div
@@ -46,8 +49,8 @@ export const CodeCard: React.FC<CodeCardProps> = ({ code, languageConfig }) => {
         style={{
           borderRadius: 24,
           overflow: 'hidden',
-          border: '1.5px solid rgba(255, 255, 255, 0.14)',
-          boxShadow: `0 24px 60px rgba(0, 0, 0, 0.65), 0 0 40px ${languageConfig.glowColor.replace('0.5', '0.18')}`,
+          border: '1.5px solid rgba(255, 255, 255, 0.16)',
+          boxShadow: `0 24px 60px rgba(0, 0, 0, 0.7), 0 0 35px ${languageConfig.glowColor.replace('0.5', '0.22')}`,
         }}
       >
         {/* macOS Terminal Header Bar */}
@@ -57,7 +60,7 @@ export const CodeCard: React.FC<CodeCardProps> = ({ code, languageConfig }) => {
             alignItems: 'center',
             justifyContent: 'space-between',
             padding: '16px 24px',
-            backgroundColor: 'rgba(15, 23, 42, 0.92)',
+            backgroundColor: 'rgba(15, 23, 42, 0.95)',
             borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
           }}
         >
@@ -129,8 +132,8 @@ export const CodeCard: React.FC<CodeCardProps> = ({ code, languageConfig }) => {
         {/* Code Content Area with Syntax Highlighting */}
         <div
           style={{
-            padding: '30px 28px',
-            backgroundColor: 'rgba(11, 15, 25, 0.94)',
+            padding: '28px 26px',
+            backgroundColor: 'rgba(11, 15, 25, 0.95)',
           }}
         >
           <Highlight

@@ -235,8 +235,109 @@ function generateArcadeLevelUp() {
   return createWavBuffer(sampleRate, samples);
 }
 
+// 7a. Còi Hú Khẩn Cấp Siren (Emergency Siren Wail)
+function generateWarningSiren() {
+  const duration = 2.0;
+  const totalSamples = Math.floor(sampleRate * duration);
+  const samples = new Float32Array(totalSamples);
+  for (let i = 0; i < totalSamples; i++) {
+    const t = i / sampleRate;
+    // Rapid oscillating siren between 600Hz and 1150Hz (3.5 cycles per sec)
+    const freq = 850 + 280 * Math.sin(2 * Math.PI * 3.5 * t);
+    const phase = 2 * Math.PI * freq * t;
+    const s = Math.sin(phase) * 0.75 + Math.sin(phase * 2) * 0.2;
+    const env = Math.min(1, t * 15) * Math.min(1, (duration - t) * 4);
+    samples[i] = s * env * 0.6;
+  }
+  return createWavBuffer(sampleRate, samples);
+}
+
+// 7b. Còi Buzzer Nguy Hiểm Công Nghiệp (Hazard Warning Buzzer)
+function generateWarningBuzzer() {
+  const duration = 2.0;
+  const totalSamples = Math.floor(sampleRate * duration);
+  const samples = new Float32Array(totalSamples);
+  const burstTimes = [0.0, 0.45, 0.9, 1.35];
+  const burstDuration = 0.35;
+
+  burstTimes.forEach((startSec) => {
+    const startIdx = Math.floor(startSec * sampleRate);
+    const burstLen = Math.floor(burstDuration * sampleRate);
+    for (let i = 0; i < burstLen && startIdx + i < totalSamples; i++) {
+      const t = i / sampleRate;
+      // Dissonant dual frequency buzz: 420Hz + 466Hz (tritone/minor 2nd danger clash)
+      const s1 = Math.sin(2 * Math.PI * 420 * t);
+      const s2 = Math.sin(2 * Math.PI * 466 * t);
+      // Hard clip to create an industrial electric buzzer timbre
+      const raw = (s1 + s2) * 1.5;
+      const clipped = Math.max(-0.8, Math.min(0.8, raw));
+      const env = Math.sin((Math.PI * i) / burstLen);
+      samples[startIdx + i] += clipped * env * 0.5;
+    }
+  });
+  return createWavBuffer(sampleRate, samples);
+}
+
+// 7c. Cảnh Báo Lỗi Glitch Cyberpunk (Cyber Glitch Danger Alert)
+function generateWarningGlitch() {
+  const duration = 2.0;
+  const totalSamples = Math.floor(sampleRate * duration);
+  const samples = new Float32Array(totalSamples);
+  for (let i = 0; i < totalSamples; i++) {
+    const t = i / sampleRate;
+    // Step-wise digital FM glitch chirps
+    const step = Math.floor(t * 12);
+    const baseFreq = 400 + ((step * 173) % 800);
+    const fm = Math.sin(2 * Math.PI * 80 * t) * 120;
+    const phase = 2 * Math.PI * (baseFreq + fm) * t;
+    const pulse = (phase % (2 * Math.PI)) < Math.PI ? 0.7 : -0.7;
+    const env = Math.exp(-((t * 6) % 1) * 3);
+    samples[i] = pulse * env * 0.45;
+  }
+  return createWavBuffer(sampleRate, samples);
+}
+
+// 7d. Còi Báo Động Hạt Nhân Nguy Cấp (Nuclear Meltdown Alarm)
+function generateWarningNuclear() {
+  const duration = 2.0;
+  const totalSamples = Math.floor(sampleRate * duration);
+  const samples = new Float32Array(totalSamples);
+  // 2 heavy sweeping wails (1.0s each)
+  for (let i = 0; i < totalSamples; i++) {
+    const t = i / sampleRate;
+    const cycle = (t % 1.0) / 1.0;
+    // Sweeps from 950Hz down to 480Hz
+    const freq = 950 - 470 * cycle;
+    const phase = 2 * Math.PI * freq * t;
+    const s = Math.sin(phase) * 0.8 + Math.sin(phase * 3) * 0.15;
+    const env = Math.sin(Math.PI * cycle);
+    samples[i] = s * env * 0.58;
+  }
+  return createWavBuffer(sampleRate, samples);
+}
+
+// 7e. Radar Cảnh Báo Nguy Hiểm Cao (High Ping Sonar Radar Alert)
+function generateWarningRadar() {
+  const duration = 2.0;
+  const totalSamples = Math.floor(sampleRate * duration);
+  const samples = new Float32Array(totalSamples);
+  const pings = [0.0, 0.5, 1.0, 1.5];
+  pings.forEach((p) => {
+    const startIdx = Math.floor(p * sampleRate);
+    const pingLen = Math.floor(0.4 * sampleRate);
+    for (let i = 0; i < pingLen && startIdx + i < totalSamples; i++) {
+      const t = i / sampleRate;
+      const freq = 1350 + Math.exp(-t * 20) * 400;
+      const s = Math.sin(2 * Math.PI * freq * t);
+      const env = Math.exp(-t * 8);
+      samples[startIdx + i] += s * env * 0.65;
+    }
+  });
+  return createWavBuffer(sampleRate, samples);
+}
+
 /**
- * Generate and write all 6 required audio sound effects to public/audio/
+ * Generate and write all required audio sound effects to public/audio/
  */
 export function generateAllAudio(quiet = false) {
   if (!fs.existsSync(countdownDir)) {
@@ -245,8 +346,31 @@ export function generateAllAudio(quiet = false) {
   if (!fs.existsSync(successDir)) {
     fs.mkdirSync(successDir, { recursive: true });
   }
+  const audioDir = path.join(projectRoot, 'public', 'audio');
+  const warningDir = path.join(audioDir, 'warning');
+  if (!fs.existsSync(warningDir)) {
+    fs.mkdirSync(warningDir, { recursive: true });
+  }
 
   if (!quiet) console.log('🎵 Đang khởi tạo các tệp âm thanh hiệu ứng...');
+
+  // 1. Còi báo động khẩn cấp mặc định
+  const warningSiren = generateWarningSiren();
+  const warningBuzzer = generateWarningBuzzer();
+  const warningGlitch = generateWarningGlitch();
+  const warningNuclear = generateWarningNuclear();
+  const warningRadar = generateWarningRadar();
+
+  fs.writeFileSync(path.join(audioDir, 'warning-sfx.mp3'), warningSiren);
+  fs.writeFileSync(path.join(audioDir, 'warning-sfx.wav'), warningSiren);
+
+  // 2. Bộ 5 âm thanh cảnh báo nguy hiểm Pixabay Danger Alert
+  fs.writeFileSync(path.join(warningDir, 'warning-siren.wav'), warningSiren);
+  fs.writeFileSync(path.join(warningDir, 'warning-buzzer.wav'), warningBuzzer);
+  fs.writeFileSync(path.join(warningDir, 'warning-glitch.wav'), warningGlitch);
+  fs.writeFileSync(path.join(warningDir, 'warning-nuclear.wav'), warningNuclear);
+  fs.writeFileSync(path.join(warningDir, 'warning-radar.wav'), warningRadar);
+  if (!quiet) console.log('   ✔ public/audio/warning/ (5 âm thanh cảnh báo nguy hiểm đa dạng)');
 
   fs.writeFileSync(path.join(countdownDir, 'tick-classic.wav'), generateClassicTick());
   if (!quiet) console.log('   ✔ public/audio/countdown/tick-classic.wav');
@@ -266,7 +390,7 @@ export function generateAllAudio(quiet = false) {
   fs.writeFileSync(path.join(successDir, 'arcade-levelup.wav'), generateArcadeLevelUp());
   if (!quiet) console.log('   ✔ public/audio/success/arcade-levelup.wav');
 
-  if (!quiet) console.log('✨ Khởi tạo thành công toàn bộ 6 hiệu ứng âm thanh!\n');
+  if (!quiet) console.log('✨ Khởi tạo thành công toàn bộ hiệu ứng âm thanh!\n');
 }
 
 // Run directly when called via `node scripts/generateAudio.mjs`
