@@ -54,7 +54,7 @@ export const HeaderHook: React.FC<HeaderHookProps> = ({
     extrapolateRight: 'clamp',
   });
 
-  const cleanWarningText = warningHookText.replace(/^[⚠️\s]+/, '').trim();
+  const cleanWarningText = warningHookText.replace(/^(?:⚠️|\s)+/u, '').trim();
 
   return (
     <div
@@ -77,7 +77,6 @@ export const HeaderHook: React.FC<HeaderHookProps> = ({
           width: frame < 36 ? '95%' : '100%',
           maxWidth: 960,
           zIndex: 50,
-          transition: 'all 0.1s ease-out',
         }}
       >
         <div

@@ -79,11 +79,15 @@ npm run render
 ```
 Renders `MainQuiz` directly to `out/quiz.mp4`.
 
-### 3. Batch Render All Quizzes
+### 3. Batch Render Quizzes (Facebook & TikTok Partitioning)
 ```bash
-npm run render:all
+npm run render:all            # Render all quizzes to out/Facebook/ and out/Tiktok/ (no duplicate videos)
+npm run render:all:facebook   # Render all Facebook quizzes to out/Facebook/
+npm run render:all:tiktok     # Render all TikTok quizzes to out/Tiktok/
+npm run render:facebook       # Render first Facebook quiz
+npm run render:tiktok         # Render first TikTok quiz
+npm run render:holiday        # Render holiday celebration video to out/Ngày lễ/
 ```
-Iterates through all quizzes in `src/data/quizzes.json` and renders each to `out/<quiz-id>.mp4`.
 
 ### 4. Render a Still Frame Preview
 ```bash
@@ -111,6 +115,7 @@ To add a new quiz, simply append an entry to `src/data/quizzes.json`:
 ```json
 {
   "id": "python-mutable-default",
+  "platform": "Facebook",
   "hookTitle": "99% Miss This Python Logic!",
   "language": "python",
   "code": "def append_item(val, items=[]):\n    items.append(val)\n    return items\n\nprint(append_item(1))\nprint(append_item(2))",

@@ -105,8 +105,8 @@ function getSoundForQuiz(quizId, overrideCountdown, overrideSuccess, overrideWar
 // Chuẩn hóa đường dẫn cho lệnh shell trên cả Windows, Linux và macOS
 const toSafePath = (filePath) => filePath.replace(/\\/g, '/');
 
-// Tạo nội dung mô tả & hashtag tối ưu cho mạng xã hội (Facebook, TikTok)
-function generateSocialPostContent(quiz) {
+// Tạo nội dung mô tả & hashtag tối ưu cho nền tảng (Facebook / TikTok)
+function generateSocialPostContent(quiz, targetPlatform = 'Facebook') {
   const hookTitle = quiz.hookTitleVi || quiz.hookTitle;
   const question = quiz.questionVi || quiz.question;
   const difficulty = quiz.difficultyVi || quiz.difficulty || 'Cơ Bản';
@@ -155,13 +155,8 @@ function generateSocialPostContent(quiz) {
     .map((opt) => `  [${opt.key}] ${opt.text}${opt.textVi && opt.textVi !== opt.text ? ` (${opt.textVi})` : ''}`)
     .join('\n');
 
-  return `================================================================================
-📌 NỘI DUNG ĐĂNG BÀI - ${hookTitle}
-📂 Ngôn ngữ: ${langName} | Độ khó: ${difficulty} | Chủ đề: ${category}
-================================================================================
-
---------------------------------------------------------------------------------
-📘 1. NỀN TẢNG: FACEBOOK (Dành cho Facebook Reels / Post Video / Post Ảnh)
+  const fbSection = `--------------------------------------------------------------------------------
+📘 NỀN TẢNG: FACEBOOK (Reels / Post Video / Post Ảnh)
 --------------------------------------------------------------------------------
 🔥 ${hookTitle} 🔥
 
@@ -182,42 +177,110 @@ ${optionsList}
 👉 Nhấn Follow kênh để nhận thêm nhiều câu đố và bí kíp lập trình mỗi ngày! 🚀✨
 
 ${fbTags}
+`;
 
---------------------------------------------------------------------------------
-🎵 2. NỀN TẢNG: TIKTOK (Ngắn gọn, cuốn hút, tối ưu thuật toán tìm kiếm SEO)
+  const tiktokSection = `--------------------------------------------------------------------------------
+🎵 NỀN TẢNG: TIKTOK (Ngắn gọn, giật tít cuốn hút, tối ưu thuật toán tìm kiếm SEO)
 --------------------------------------------------------------------------------
 ${hookTitle} 😱 Bạn có đoán được kết quả của đoạn code ${langName} này không? Comment ngay đáp án của bạn trước khi hết giờ nhé! 👇✨
 
 ${tiktokTags}
+`;
+
+  const isFb = targetPlatform.toLowerCase() === 'facebook';
+
+  return `================================================================================
+📌 NỘI DUNG ĐĂNG BÀI - DÀNH CHO ${targetPlatform.toUpperCase()}
+📂 Ngôn ngữ: ${langName} | Độ khó: ${difficulty} | Chủ đề: ${category}
+================================================================================
+
+${isFb ? fbSection + '\n' + tiktokSection : tiktokSection + '\n' + fbSection}
 ================================================================================
 `;
 }
 
-// 3. Xử lý tham số dòng lệnh CLI linh hoạt
+// 3. Phân chia độc quyền quizzes vào 2 nhóm Facebook và Tiktok (Tuyệt đối không trùng lặp)
+function partitionQuizzesByPlatform(quizList) {
+  const fbList = [];
+  const ttList = [];
+  const unassigned = [];
+
+  for (const q of quizList) {
+    const p = String(q.platform || '').trim().toLowerCase();
+    if (p === 'facebook') {
+      fbList.push({ ...q, resolvedPlatform: 'Facebook' });
+    } else if (p === 'tiktok') {
+      ttList.push({ ...q, resolvedPlatform: 'Tiktok' });
+    } else {
+      unassigned.push(q);
+    }
+  }
+
+  // Tự động phân bổ xen kẽ 50/50 cho các câu hỏi chưa cấu hình platform
+  for (let i = 0; i < unassigned.length; i++) {
+    const q = unassigned[i];
+    if (fbList.length <= ttList.length) {
+      fbList.push({ ...q, resolvedPlatform: 'Facebook' });
+    } else {
+      ttList.push({ ...q, resolvedPlatform: 'Tiktok' });
+    }
+  }
+
+  return { fbList, ttList };
+}
+
+// 4. Xử lý tham số dòng lệnh CLI linh hoạt
 const args = process.argv.slice(2);
 const isFirstOnly = args.includes('--first') || args.includes('-1');
 const isStillOnly = args.includes('--still-only') || args.includes('--stills');
 const isVideoOnly = args.includes('--video-only');
 const isForceInDepth = args.includes('--indepth') || args.includes('--in-depth') || args.includes('--mode=indepth') || args.includes('--mode=in-depth');
 const isForceBait = args.includes('--bait') || args.includes('--mode=bait') || args.includes('--mode=engagement-bait');
-const targetId = args.find((arg) => !arg.startsWith('-')) || null;
+
+const platformArg = args.find((a) => a.startsWith('--platform='))?.split('=')[1]?.toLowerCase();
+const isFbFilter = args.includes('--facebook') || args.includes('--fb') || platformArg === 'facebook';
+const isTtFilter = args.includes('--tiktok') || args.includes('--tt') || platformArg === 'tiktok';
+
+const targetId = args.find((arg) => !arg.startsWith('-') && !arg.includes('=')) || null;
+
+const { fbList, ttList } = partitionQuizzesByPlatform(quizzes);
+
+let quizzesToProcess = [];
 
 if (targetId) {
-  const matched = quizzes.find((q) => q.id === targetId);
-  if (!matched) {
+  const matchedFb = fbList.find((q) => q.id === targetId);
+  const matchedTt = ttList.find((q) => q.id === targetId);
+  if (matchedFb) {
+    quizzesToProcess = [matchedFb];
+  } else if (matchedTt) {
+    quizzesToProcess = [matchedTt];
+  } else {
     console.error(`❌ Không tìm thấy câu hỏi có ID "${targetId}".`);
     console.error(`📋 Danh sách ID có sẵn: ${quizzes.map((q) => q.id).join(', ')}`);
     process.exit(1);
   }
+} else if (isFbFilter) {
+  quizzesToProcess = isFirstOnly ? fbList.slice(0, 1) : fbList;
+} else if (isTtFilter) {
+  quizzesToProcess = isFirstOnly ? ttList.slice(0, 1) : ttList;
+} else {
+  // Mặc định: Xử lý cả 2 nền tảng
+  if (isFirstOnly) {
+    quizzesToProcess = [
+      ...(fbList.length > 0 ? [fbList[0]] : []),
+      ...(ttList.length > 0 ? [ttList[0]] : []),
+    ];
+  } else {
+    quizzesToProcess = [...fbList, ...ttList];
+  }
 }
 
-const quizzesToProcess = targetId
-  ? quizzes.filter((q) => q.id === targetId)
-  : isFirstOnly
-    ? [quizzes[0]]
-    : quizzes;
-
 console.log(`🎬 Chuẩn bị xử lý ${quizzesToProcess.length} bộ video & hình ảnh...`);
+console.log(`   📂 Phân loại thư mục:`);
+console.log(`      📘 Facebook (${fbList.length} video): ${fbList.map((q) => q.id).join(', ')}`);
+console.log(`      🎵 Tiktok   (${ttList.length} video): ${ttList.map((q) => q.id).join(', ')}`);
+console.log(`   🔒 Đảm bảo: 2 thư mục hoàn toàn độc lập, không có bất kỳ video nào bị trùng lặp!`);
+
 if (isForceInDepth) {
   console.log(`   🎯 Chế độ ép buộc: TOÀN BỘ là Phương án B: in-depth (16s - Giải thích sâu & Lưu bài)`);
 } else if (isForceBait) {
@@ -234,10 +297,17 @@ let failCount = 0;
 
 for (let i = 0; i < quizzesToProcess.length; i++) {
   const quiz = quizzesToProcess[i];
+  const platformFolder = quiz.resolvedPlatform; // 'Facebook' hoặc 'Tiktok'
+  const platformDir = path.join(outDir, platformFolder);
+
+  if (!fs.existsSync(platformDir)) {
+    fs.mkdirSync(platformDir, { recursive: true });
+  }
+
   const originalIdx = quizzes.findIndex((q) => q.id === quiz.id);
   const orderNumber = (originalIdx >= 0 ? originalIdx : i) + 1;
   const folderName = quiz.folderNameVi || `${String(orderNumber).padStart(2, '0')}_${quiz.id}`;
-  const quizDir = path.join(outDir, folderName);
+  const quizDir = path.join(platformDir, folderName);
 
   if (!fs.existsSync(quizDir)) {
     fs.mkdirSync(quizDir, { recursive: true });
@@ -263,7 +333,8 @@ for (let i = 0; i < quizzesToProcess.length; i++) {
   const metadataPath = path.join(quizDir, 'thong_tin_cau_do.json');
 
   console.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
-  console.log(`[${i + 1}/${quizzesToProcess.length}] 📁 Thư mục: out/${folderName}`);
+  console.log(`[${i + 1}/${quizzesToProcess.length}] 📁 Thư mục: out/${platformFolder}/${folderName}`);
+  console.log(`   🌐 Nền tảng: ${platformFolder.toUpperCase()}`);
   console.log(`   Tiêu đề EN: ${quiz.hookTitle}`);
   console.log(`   Tiêu đề VI: ${quiz.hookTitleVi || ''}`);
   console.log(`   Ngôn ngữ:   ${quiz.language.toUpperCase()}`);
@@ -300,9 +371,9 @@ for (let i = 0; i < quizzesToProcess.length; i++) {
       execSync(cmdReveal, { cwd: projectRoot, stdio: 'inherit' });
     }
 
-    // 3. Tạo file mô tả & hashtag đăng bài Facebook / TikTok
-    fs.writeFileSync(postContentPath, generateSocialPostContent(quiz), 'utf-8');
-    console.log(`   📝 Đã lưu nội dung đăng bài: mo_ta_dang_bai.txt (Facebook & TikTok)`);
+    // 3. Tạo file mô tả & hashtag đăng bài chuyên biệt cho Facebook / TikTok
+    fs.writeFileSync(postContentPath, generateSocialPostContent(quiz, platformFolder), 'utf-8');
+    console.log(`   📝 Đã lưu nội dung đăng bài tối ưu cho ${platformFolder}: mo_ta_dang_bai.txt`);
 
     // 4. Lưu metadata thông tin câu đố JSON
     fs.writeFileSync(
@@ -310,7 +381,9 @@ for (let i = 0; i < quizzesToProcess.length; i++) {
       JSON.stringify(
         {
           id: quiz.id,
+          platform: platformFolder,
           folderNameVi: folderName,
+          targetFolder: `out/${platformFolder}/${folderName}`,
           language: quiz.language,
           hookTitleEn: quiz.hookTitle,
           hookTitleVi: quiz.hookTitleVi,
@@ -335,8 +408,8 @@ for (let i = 0; i < quizzesToProcess.length; i++) {
           renderedAt: new Date().toISOString(),
           resolution: '1080x1920',
           fps: 30,
-          durationFrames: 300,
-          durationSeconds: 10,
+          durationFrames: isQuizInDepth ? 480 : 270,
+          durationSeconds: isQuizInDepth ? 16 : 9,
         },
         null,
         2
@@ -344,7 +417,7 @@ for (let i = 0; i < quizzesToProcess.length; i++) {
       'utf-8'
     );
 
-    console.log(`   ✅ Hoàn thành xuất sắc: ${folderName}\n`);
+    console.log(`   ✅ Hoàn thành xuất sắc: out/${platformFolder}/${folderName}\n`);
     successCount++;
   } catch (err) {
     failCount++;
@@ -359,5 +432,8 @@ if (failCount > 0) {
   console.log(`   ❌ Thất bại:   ${failCount}`);
   process.exit(1);
 } else {
-  console.log('🎉 TẤT CẢ TỆP ĐÃ ĐƯỢC XUẤT VÀ PHÂN LOẠI VÀO TỪNG THƯ MỤC TRONG out/ !');
+  console.log('🎉 TẤT CẢ TỆP ĐÃ ĐƯỢC XUẤT VÀ PHÂN LOẠI VÀO 2 FOLDER:');
+  console.log('   📘 out/Facebook/ (Tất cả video dành riêng cho Facebook)');
+  console.log('   🎵 out/Tiktok/   (Tất cả video dành riêng cho TikTok)');
+  console.log('   ✨ 100% video KHÁC NHAU, KHÔNG TRÙNG LẶP!');
 }

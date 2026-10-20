@@ -41,7 +41,6 @@ export const CodeCard: React.FC<CodeCardProps> = ({ code, languageConfig }) => {
         width: '92%',
         margin: '0 auto',
         zIndex: 10,
-        transition: 'filter 0.2s ease-out',
       }}
     >
       <div

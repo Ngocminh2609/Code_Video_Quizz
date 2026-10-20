@@ -7,20 +7,43 @@
     "difficulty": "Easy",
     "difficultyVi": "Cơ Bản (Easy)",
     "displayMode": "engagement-bait",
+    "platform": "Facebook",
     "warningHook": "⚠️ 90% NGƯỜI MỚI HỌC SẼ CHỌN SAI CÂU NÀY!",
     "language": "python",
     "code": "print(True + True * 3)",
     "question": "What will be printed to stdout?",
     "questionVi": "Kết quả in ra màn hình là gì?",
     "options": [
-      { "key": "A", "text": "TypeError", "textVi": "Lỗi TypeError" },
-      { "key": "B", "text": "6", "textVi": "6" },
-      { "key": "C", "text": "4", "textVi": "4" },
-      { "key": "D", "text": "True3", "textVi": "True3" }
+      {
+        "key": "A",
+        "text": "TypeError",
+        "textVi": "Lỗi TypeError"
+      },
+      {
+        "key": "B",
+        "text": "6",
+        "textVi": "6"
+      },
+      {
+        "key": "C",
+        "text": "4",
+        "textVi": "4"
+      },
+      {
+        "key": "D",
+        "text": "True3",
+        "textVi": "True3"
+      }
     ],
     "correctAnswer": "C",
-    "confusingOptions": ["B", "C"],
-    "baitOptions": ["B", "C"],
+    "confusingOptions": [
+      "B",
+      "C"
+    ],
+    "baitOptions": [
+      "B",
+      "C"
+    ],
     "explanation": "In Python, True evaluates to integer 1. Multiplication precedes addition: 1 + (1 * 3) = 4.",
     "explanationVi": "Trong Python, True kế thừa từ kiểu int và mang giá trị số 1. Nhân trước cộng sau: 1 + (1 * 3) = 4.",
     "inDepthExplanation": "Cơ chế: bool trong Python là subclass của int (issubclass(bool, int) == True). Do đó True == 1, False == 0. Toán tử nhân '*' có độ ưu tiên cao hơn '+', phép toán trở thành 1 + (1 * 3) = 4 thay vì (1 + 1) * 3 = 6.",
@@ -46,20 +69,43 @@
     "difficulty": "Easy",
     "difficultyVi": "Cơ Bản (Easy)",
     "displayMode": "in-depth",
+    "platform": "Tiktok",
     "warningHook": "⚠️ 90% NGƯỜI MỚI HỌC SẼ CHỌN SAI CÂU NÀY!",
     "language": "javascript",
     "code": "console.log(1 + '2' + 3);",
     "question": "What will be printed to console?",
     "questionVi": "Đầu ra console.log là gì?",
     "options": [
-      { "key": "A", "text": "6", "textVi": "6" },
-      { "key": "B", "text": "'123'", "textVi": "Chuỗi '123'" },
-      { "key": "C", "text": "15", "textVi": "15" },
-      { "key": "D", "text": "NaN", "textVi": "NaN" }
+      {
+        "key": "A",
+        "text": "6",
+        "textVi": "6"
+      },
+      {
+        "key": "B",
+        "text": "'123'",
+        "textVi": "Chuỗi '123'"
+      },
+      {
+        "key": "C",
+        "text": "15",
+        "textVi": "15"
+      },
+      {
+        "key": "D",
+        "text": "NaN",
+        "textVi": "NaN"
+      }
     ],
     "correctAnswer": "B",
-    "confusingOptions": ["A", "B"],
-    "baitOptions": ["A", "B"],
+    "confusingOptions": [
+      "A",
+      "B"
+    ],
+    "baitOptions": [
+      "A",
+      "B"
+    ],
     "explanation": "Left-to-right evaluation: 1 + '2' produces string '12', then '12' + 3 concatenates into '123'.",
     "explanationVi": "Thực hiện từ trái sang phải: 1 + '2' tạo chuỗi '12', sau đó '12' + 3 tiếp tục nối thành '123'!",
     "inDepthExplanation": "Cơ chế: Toán tử '+' thực thi theo tính kết hợp từ trái sang phải (Left-to-right). Khi một toán hạng là String, JS ép kiểu toán hạng còn lại thành String và thực hiện phép nối chuỗi. 1 + '2' -> '12', '12' + 3 -> '123'.",
@@ -85,20 +131,43 @@
     "difficulty": "Easy",
     "difficultyVi": "Cơ Bản (Easy)",
     "displayMode": "engagement-bait",
+    "platform": "Facebook",
     "warningHook": "⚠️ 90% NGƯỜI MỚI HỌC SẼ CHỌN SAI CÂU NÀY!",
     "language": "python",
     "code": "a = [1, 2]\nb = a\nb.append(3)\nprint(len(a))",
     "question": "What will be printed to stdout?",
     "questionVi": "Giá trị len(a) in ra là bao nhiêu?",
     "options": [
-      { "key": "A", "text": "2", "textVi": "2" },
-      { "key": "B", "text": "3", "textVi": "3" },
-      { "key": "C", "text": "1", "textVi": "1" },
-      { "key": "D", "text": "AttributeError", "textVi": "Lỗi AttributeError" }
+      {
+        "key": "A",
+        "text": "2",
+        "textVi": "2"
+      },
+      {
+        "key": "B",
+        "text": "3",
+        "textVi": "3"
+      },
+      {
+        "key": "C",
+        "text": "1",
+        "textVi": "1"
+      },
+      {
+        "key": "D",
+        "text": "AttributeError",
+        "textVi": "Lỗi AttributeError"
+      }
     ],
     "correctAnswer": "B",
-    "confusingOptions": ["A", "B"],
-    "baitOptions": ["A", "B"],
+    "confusingOptions": [
+      "A",
+      "B"
+    ],
+    "baitOptions": [
+      "A",
+      "B"
+    ],
     "explanation": "'b = a' copies the reference, not the list. Modifying b directly changes list a in place.",
     "explanationVi": "Phép gán 'b = a' chỉ sao chép tham chiếu ô nhớ. Khi b thêm phần tử, danh sách a cũng thay đổi thành 3 phần tử!",
     "inDepthExplanation": "Cơ chế: Trong Python, List là kiểu dữ liệu có thể thay đổi (mutable). Lệnh 'b = a' làm cho cả 2 biến cùng trỏ tới 1 địa chỉ ô nhớ trong Heap (id(a) == id(b)). Để tạo bản sao độc lập, phải dùng b = a.copy() hoặc b = a[:].",
@@ -124,20 +193,43 @@
     "difficulty": "Easy",
     "difficultyVi": "Cơ Bản (Easy)",
     "displayMode": "in-depth",
+    "platform": "Tiktok",
     "warningHook": "⚠️ 90% NGƯỜI MỚI HỌC SẼ CHỌN SAI CÂU NÀY!",
     "language": "javascript",
     "code": "console.log(typeof NaN);",
     "question": "What is the output of typeof NaN?",
     "questionVi": "Toán tử typeof NaN trả về giá trị gì?",
     "options": [
-      { "key": "A", "text": "'undefined'", "textVi": "'undefined'" },
-      { "key": "B", "text": "'nan'", "textVi": "'nan'" },
-      { "key": "C", "text": "'number'", "textVi": "'number'" },
-      { "key": "D", "text": "'object'", "textVi": "'object'" }
+      {
+        "key": "A",
+        "text": "'undefined'",
+        "textVi": "'undefined'"
+      },
+      {
+        "key": "B",
+        "text": "'nan'",
+        "textVi": "'nan'"
+      },
+      {
+        "key": "C",
+        "text": "'number'",
+        "textVi": "'number'"
+      },
+      {
+        "key": "D",
+        "text": "'object'",
+        "textVi": "'object'"
+      }
     ],
     "correctAnswer": "C",
-    "confusingOptions": ["B", "C"],
-    "baitOptions": ["B", "C"],
+    "confusingOptions": [
+      "B",
+      "C"
+    ],
+    "baitOptions": [
+      "B",
+      "C"
+    ],
     "explanation": "NaN stands for 'Not a Number', but its primitive type is still 'number' according to IEEE-754.",
     "explanationVi": "Tuy viết tắt là 'Not-a-Number', nhưng trong đặc tả IEEE-754 và JS, NaN vẫn thuộc kiểu dữ liệu 'number'!",
     "inDepthExplanation": "Cơ chế: Theo chuẩn dấu phẩy động IEEE-754, NaN biểu diễn một giá trị số không xác định hợp lệ (ví dụ kết quả 0 / 0). Do đó trong ECMAScript, typeof NaN trả về 'number'. Để kiểm tra NaN chuẩn xác, dùng Number.isNaN(val).",
@@ -163,20 +255,43 @@
     "difficulty": "Easy",
     "difficultyVi": "Cơ Bản (Easy)",
     "displayMode": "engagement-bait",
+    "platform": "Facebook",
     "warningHook": "⚠️ 90% NGƯỜI MỚI HỌC SẼ CHỌN SAI CÂU NÀY!",
     "language": "python",
     "code": "text = 'code'\nprint(text[::-1][0])",
     "question": "What character will be printed?",
     "questionVi": "Kết quả in ra màn hình là ký tự nào?",
     "options": [
-      { "key": "A", "text": "'c'", "textVi": "'c'" },
-      { "key": "B", "text": "'e'", "textVi": "'e'" },
-      { "key": "C", "text": "'d'", "textVi": "'d'" },
-      { "key": "D", "text": "'o'", "textVi": "'o'" }
+      {
+        "key": "A",
+        "text": "'c'",
+        "textVi": "'c'"
+      },
+      {
+        "key": "B",
+        "text": "'e'",
+        "textVi": "'e'"
+      },
+      {
+        "key": "C",
+        "text": "'d'",
+        "textVi": "'d'"
+      },
+      {
+        "key": "D",
+        "text": "'o'",
+        "textVi": "'o'"
+      }
     ],
     "correctAnswer": "B",
-    "confusingOptions": ["A", "B"],
-    "baitOptions": ["A", "B"],
+    "confusingOptions": [
+      "A",
+      "B"
+    ],
+    "baitOptions": [
+      "A",
+      "B"
+    ],
     "explanation": "text[::-1] reverses 'code' to 'edoc'. Index [0] takes the first character 'e'.",
     "explanationVi": "Cú pháp text[::-1] đảo ngược 'code' thành 'edoc'. Ký tự tại chỉ mục [0] chính là 'e'!",
     "inDepthExplanation": "Cơ chế: Cú pháp slice [start:stop:step] với step = -1 duyệt chuỗi từ cuối về đầu, tạo ra chuỗi mới 'edoc'. Phép truy xuất index [0] trên chuỗi 'edoc' trả về ký tự đầu tiên là 'e'.",

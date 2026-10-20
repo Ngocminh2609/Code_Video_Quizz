@@ -176,7 +176,6 @@ export const OptionsGrid: React.FC<OptionsGridProps> = ({
                 boxShadow,
                 backdropFilter: 'blur(14px)',
                 WebkitBackdropFilter: 'blur(14px)',
-                transition: 'border-color 0.2s, box-shadow 0.2s',
               }}
             >
               {/* Option Key Badge [A], [B], [C], [D] */}

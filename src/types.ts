@@ -3,6 +3,7 @@ import { z } from 'zod';
 export type Language = 'python' | 'javascript' | 'cpp' | 'java';
 export type DisplayMode = 'engagement-bait' | 'in-depth';
 export type DifficultyLevel = 'Easy' | 'Medium' | 'Hard' | 'Extreme';
+export type TargetPlatform = 'Facebook' | 'Tiktok';
 
 export const DIFFICULTY_WARNING_HOOKS: Record<string, string> = {
   Easy: '⚠️ 90% NGƯỜI MỚI HỌC SẼ CHỌN SAI CÂU NÀY!',
@@ -46,6 +47,7 @@ export const quizItemSchema = z.object({
   audioSuccess: z.string().optional(),
   audioWarning: z.string().optional(),
   displayMode: z.enum(['engagement-bait', 'in-depth']).optional(),
+  platform: z.enum(['Facebook', 'Tiktok', 'facebook', 'tiktok']).optional(),
 });
 
 export const quizVideoSchema = z.object({

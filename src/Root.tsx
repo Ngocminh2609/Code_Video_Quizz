@@ -4,6 +4,8 @@ import './index.css';
 import { QuizComposition } from './QuizComposition';
 import { QuizItem, quizVideoSchema } from './types';
 import rawQuizzes from './data/quizzes.json';
+import { HolidayComposition } from './holidays/HolidayComposition';
+import { holidayConfigSchema } from './holidays/types';
 
 const quizzes = rawQuizzes as QuizItem[];
 const defaultQuiz: QuizItem = quizzes[0];
@@ -57,6 +59,27 @@ export const RemotionRoot: React.FC = () => {
           hideAnswer: true,
         }}
       />
+
+      {/* 🌸 Folder: Ngày Lễ Việt Nam (Chuyên làm các video ngày lễ lớn) */}
+      <Folder name="Ngay-Le">
+        <Composition
+          id="Holiday-20-10"
+          component={HolidayComposition}
+          durationInFrames={360}
+          fps={30}
+          width={1080}
+          height={1920}
+          schema={holidayConfigSchema}
+          defaultProps={{
+            holidayName: '20/10 - Ngày Phụ Nữ Việt Nam',
+            titleBadge: 'CHÚC MỪNG NGÀY PHỤ NỮ VIỆT NAM',
+            dateHighlight: '20 • 10',
+            mainWish:
+              'Chúc bạn luôn rạng rỡ, bình an trong tâm hồn và được yêu thương theo cách trọn vẹn nhất.',
+            subWish: "Happy Vietnamese Women's Day ✨",
+          }}
+        />
+      </Folder>
 
       {/* Folder Registry: Quizzes mặc định (Engagement-Bait - 9s) */}
       <Folder name="All-Quizzes">

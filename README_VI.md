@@ -15,28 +15,27 @@ Dự án hoàn chỉnh, chuẩn production được xây dựng bằng **Remotio
    - **Câu hỏi & Đáp án**: Câu hỏi chính tiếng Anh kèm dòng dịch nghĩa tiếng Việt (`questionVi`) ngay bên dưới.
    - **Thẻ giải thích cuối video**: Hiển thị cả 2 đoạn phân tích cặn kẽ có cờ đại diện 🇬🇧 Tiếng Anh và 🇻🇳 Tiếng Việt, cùng lời kêu gọi bình luận (CTA) song ngữ.
 
-2. **Sắp Xếp & Đặt Tên Thư Mục Tiếng Việt Chuẩn Hóa**:
-   Khi xuất video (bằng lệnh `npm run render` hoặc `npm run render:all`), toàn bộ tài nguyên của mỗi video sẽ được tự động tạo và gom vào một thư mục riêng biệt đặt tên tiếng Việt rõ ràng:
+2. **Sắp Xếp & Phân Loại Thư Mục Đầu Ra Chuẩn Hóa**:
+   Khi xuất video, toàn bộ video và tài nguyên sẽ được tự động phân loại rõ ràng vào các thư mục:
+   - `out/Facebook/`: Chứa các video độc quyền dành riêng cho Facebook Reels & Post.
+   - `out/Tiktok/`: Chứa các video độc quyền dành riêng cho TikTok.
+   - `out/Ngày lễ/`: Chuyên sản xuất các video chúc mừng các ngày lễ lớn của Việt Nam (như 20/10, Tết, 8/3,...).
 
    ```
    out/
-   ├── 01_Python_Gia_Tri_Mac_Dinh_List/
-   │   ├── video_hoan_chinh.mp4      # Video MP4 10s (1080x1920, 30 FPS)
-   │   ├── anh_cau_hoi.png           # Ảnh câu hỏi thuần túy (KHÔNG đếm ngược, KHÔNG đáp án)
-   │   ├── anh_dem_nguoc.png         # Ảnh frame 100 (thời điểm đếm ngược suy nghĩ)
-   │   ├── anh_cong_bo_dap_an.png    # Ảnh frame 240 (thời điểm công bố đáp án + pháo hoa)
-   │   ├── thong_tin_cau_do.json     # Metadata chi tiết song ngữ của câu đố
-   │   └── mo_ta_dang_bai.txt        # Caption kèm icon & hashtag tối ưu cho Facebook & TikTok
-   ├── 02_JavaScript_Ep_Kieu_Cong_Mang/
-   │   ├── video_hoan_chinh.mp4
-   │   ├── anh_cau_hoi.png
-   │   ├── anh_dem_nguoc.png
-   │   ├── anh_cong_bo_dap_an.png
-   │   ├── thong_tin_cau_do.json
-   │   └── mo_ta_dang_bai.txt
-   ├── 03_CPP_Tham_Chieu_Khong_The_Gan_Lai/
-   ├── 04_Java_Bo_Nho_Dem_Integer_Cache/
-   └── 05_Python_Bien_Doi_List_Trong_Tuple/
+   ├── Facebook/
+   │   ├── 01_Python_Toan_Tu_Boolean_True/
+   │   ├── 03_Python_Tham_Chieu_Danh_Sach_List/
+   │   └── 05_Python_Dao_Nguoc_Chuoi_Slice/
+   ├── Tiktok/
+   │   ├── 02_JavaScript_Noi_Chuoi_Va_So/
+   │   └── 04_JavaScript_Kieu_Du_Lieu_NaN/
+   └── Ngày lễ/
+       └── 20_10_Phu_Nu_Viet_Nam/
+           ├── video_chuc_mung_20_10.mp4  # Video MP4 chúc mừng 20/10 (1080x1920)
+           ├── anh_preview_20_10.png      # Ảnh chụp preview đại diện
+           ├── thong_tin_ngay_le.json     # Metadata chi tiết ngày lễ
+           └── mo_ta_dang_bai.txt         # Caption ý nghĩa + hashtag ngày 20/10
    ```
 
 ---
@@ -145,8 +144,13 @@ npm run render:all
 | Lệnh | Ý nghĩa |
 |---|---|
 | `npm run dev` | Bật Remotion Studio xem trước trực tiếp trên trình duyệt |
-| `npm run render` | Xuất video và bộ ảnh của câu đố đầu tiên vào thư mục tiếng Việt riêng |
-| `npm run render:all` | Xuất HÀNG LOẠT tất cả các video vào từng thư mục tiếng Việt tương ứng |
+| `npm run render:holiday` | **Xuất video Ngày Lễ 20/10 vào folder `out/Ngày lễ/`** |
+| `npm run render` | Xuất video mẫu đầu tiên cho Facebook và Tiktok |
+| `npm run render:facebook` | Xuất 1 video đầu tiên vào `out/Facebook/` |
+| `npm run render:tiktok` | Xuất 1 video đầu tiên vào `out/Tiktok/` |
+| `npm run render:all` | Xuất toàn bộ video vào 2 folder `Facebook` và `Tiktok` (không trùng) |
+| `npm run render:all:facebook` | Xuất toàn bộ video dành riêng cho Facebook |
+| `npm run render:all:tiktok` | Xuất toàn bộ video dành riêng cho Tiktok |
 | `npm run render:still` | Xuất nhanh 1 ảnh tĩnh snapshot |
 | `npm run lint` | Kiểm tra toàn bộ mã nguồn TypeScript và ESLint |
 
